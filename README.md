@@ -5,15 +5,11 @@
 **|| जय सेवा ||**
 
 🌿 **Mgboard** is a privacy-first, offline Android keyboard (IME) for the **Masaram Gondi
-script** (मासाराम गोंडी लिपि, Unicode U+11D00–U+11D5F), built as a 1:1 port of
-[Mgboard_Web](https://github.com/saiyyamdeveloper/Mgboard_Web) — with the settings,
-grid menu, themes and gesture-navigation behaviour of a modern system keyboard.
+script** (मासाराम गोंडी लिपि, Unicode U+11D00–U+11D5F) — a full system keyboard with the
+settings, grid menu, themes, toolbar and gesture-navigation behaviour of a modern
+keyboard, plus on-device translation and rich-media panels.
 
 Developed by **[Saiyyam Ji (@saiyyamdeveloper)](https://github.com/saiyyamdeveloper)**.
-
-> **Live web version:** ⌨️ https://saiyyamdeveloper.github.io/Mgboard_Web/
-> This repo is the **Android app**; the web keyboard remains the reference
-> implementation, and both are kept in verified parity.
 
 ---
 
@@ -34,7 +30,7 @@ Developed by **[Saiyyam Ji (@saiyyamdeveloper)](https://github.com/saiyyamdevelo
   Repha (`𑵆𑴎`)
 - **Text is the source of truth** — composition state is re-derived from the text around
   the caret, so cursor moves, pastes and external edits never corrupt state
-- **Backspace** — 400 ms initial repeat, then 70 ms (held), same as the web app
+- **Backspace** — 400 ms initial repeat, then 70 ms (held)
 - **Undo / Redo** — 300-step stack with word boundaries
 - **Spacebar trackpad** — drag to move the cursor
 - **Code-point safe everywhere** — Gondi lives in a supplementary Unicode plane, so all
@@ -89,7 +85,7 @@ Developed by **[Saiyyam Ji (@saiyyamdeveloper)](https://github.com/saiyyamdevelo
 
 ### Settings
 
-The complete settings tree ported 1:1 from the web app (which was itself ported from
+The complete settings tree ported 1:1 from
 Gboard's own resources): **1055/1055 parity checks passing** — every page, item, label,
 summary, default and search keyword.
 
@@ -129,7 +125,7 @@ Or open the repo in Android Studio and press Run.
 ```bash
 ./scripts/run_jvm_tests.sh      # engine, converter, layouts, shift, grid menu, voice, toolbar, translate, media — 930 assertions
                                   # (GitHub Actions par bhi yahi suite har push par chalta hai — badge upar)
-python3 scripts/check_parity.py # generated settings model vs web — 1055/1055
+python3 scripts/check_parity.py # generated settings model vs research data — 1055/1055
 ```
 
 The JVM suite runs **without the Android SDK** — the entire typing engine, layout model,
@@ -149,14 +145,14 @@ MgBoardIme (InputMethodService)  ──▶  KeyboardModel  ──▶  TypingEngi
 Compose KeyboardScreen              QwertyShift · GridMenu                 ImeTextInput
 KeyGestures (400/70/300ms)          KeyboardLayout · KeySpec            (InputConnection)
 GestureNavPaddingController         DevToGondi (voice/bulk converter)
-MgTheme · MgondiFont (bundled TTF)  SgPrefs (web's localStorage keys)
+MgTheme · MgondiFont (bundled TTF)  SgPrefs (stable storage keys)
 ```
 
 Full diagram, module table and design rules: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
 
 ### Generated code
 
-Layout data, the settings model and the grid-menu tiles are **generated from the web
+Layout data, the settings model and the grid-menu tiles are **generated from research
 app**, never hand-edited:
 
 | Script | Output |
@@ -166,7 +162,7 @@ app**, never hand-edited:
 | `scripts/gen_grid_menu.py` | `grid/GridMenu.kt` |
 | `scripts/check_parity.py` | parity report (non-zero exit on mismatch) |
 
-Change the web keyboard → re-run the generators → parity is re-verified automatically.
+Update the research data → re-run the generators → parity is re-verified automatically.
 
 ---
 
@@ -184,7 +180,7 @@ The full research is in [`docs/research/`](docs/research/README.md):
 | [toolbar-project](docs/research/toolbar-project/) — keyboard toolbar / suggestion strip | ✅ implemented (access points, capacity/overflow, panels) |
 | [voice-pill-project](docs/research/voice-pill-project/) — voice typing pill | ✅ implemented (IME-window widget, 5 states, drag-flip, persistence) |
 
-Parity details, including a web quirk that is deliberately **locked** rather than fixed:
+Parity details, including a cluster-boundary quirk that is deliberately **locked** rather than fixed:
 [`docs/PARITY.md`](docs/PARITY.md)
 
 ---
@@ -202,7 +198,7 @@ Parity details, including a web quirk that is deliberately **locked** rather tha
 - **Masaram Gondi font**: [Noto Sans Masaram Gondi](https://github.com/notofonts/masaram-gondi),
   © 2022 The Noto Project Authors, **SIL Open Font License 1.1** —
   license text bundled at [`app/src/main/res/font/OFL-masaram-gondi.txt`](app/src/main/res/font/OFL-masaram-gondi.txt)
-- **Reference implementation**: [Mgboard_Web](https://github.com/saiyyamdeveloper/Mgboard_Web)
+- **Research & parity docs**: [`docs/research/`](docs/research/) (Gboard APK evidence + parity rules)
 - Settings labels, summaries and gate strings are quoted from **Gboard** for
   interoperability/parity research. This project is an independent community effort and
   is **not affiliated with, endorsed by, or connected to Google LLC**.
