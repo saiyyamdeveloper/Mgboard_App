@@ -23,6 +23,7 @@ Ek hi typing engine, do shells (web demo + Android IME). Android app ka poora lo
 │  KeyboardModel ── TypingEngine ── UndoStack                         │
 │  VoiceWidgetController ── WidgetDrag ── VoiceWidgetTransitions      │
 │  SuggestionStrip ── AccessPoints ── ToolbarFlags ── ToolbarPanel     │
+│  TranslateController ── TranslateEngine(ML Kit) ── KlipyApi ── commit │
 │       │               │                                             │
 │       │               ├── TextInput (interface)                     │
 │       │               └── DevToGondi (voice/bulk converter)         │
@@ -47,6 +48,8 @@ Ek hi typing engine, do shells (web demo + Android IME). Android app ka poora lo
 | `gridmenu/` | 976 | Gboard-exact grid-menu controller/customizer/panel-host | `docs/research/grid-menu-project/` |
 | `model/` | 1102 | Gboard Settings ka poora tree (labels, summaries, search keywords) | **generated** by `scripts/gen_settings_model.py`, verified by `check_parity.py` |
 | `prefs/` | 206 | SharedPreferences wrapper — keys web ke localStorage keys ke same | web `sg*` functions |
+| `translate/` | ~330 | On-device translate panel ka model — language inventory, phases, script detection, controller (debounce/stale-discard/model states); ML Kit `TranslateEngine` seam ke peeche | `docs/research/toolbar-project/TRANSLATE-GIF-FEASIBILITY.md` |
+| `media/` | ~480 | GIF/Stickers layer — bundled pack data (generated), Klipy API client + MiniJson parser, availability gating; Android par `MediaCommitController` (Commit Content API + FileProvider) | same |
 | `toolbar/` | ~330 | Gboard keyboard toolbar model — access points, flags, suggestion-strip build (capacity/order/overflow/chips), panel enums, symbols categories | `docs/research/toolbar-project/` |
 | `voice/` | ~1200 | Gboard-style voice toolbar — 5 states, drag/flip/dock, persistence, dictation bridge, Compose UI | `docs/research/voice-pill-project/` |
 | `ui/` | 1173 | Compose keyboard, themes, popups, settings screen, in-app preview | web CSS/JS render + `mgboard-setting-project` |
@@ -111,4 +114,6 @@ Isse preview aur real keyboard ka behaviour drift nahi kar sakta.
 | `QwertyShift.onShiftTap(now)` | clock inject → double-tap window testable |
 | `VoiceHost` interface | voice toolbar ko Android (mic/IME/prefs) se alag karta hai → poori state machine JVM par test hoti hai |
 | `EditorActions` interface | edit-menu/IME-action ko `InputConnection` se alag karta hai → toolbar model JVM par test hota hai |
+| `TranslateEngine` interface | ML Kit ko model se alag karta hai → poora translate state machine JVM par test hota hai; preview fake engine use karta hai |
+| `MediaProvider`/transport lambda | Klipy network call inject hota hai (`httpGet`, `klipyFetch`) → URL/parse logic JVM par test hota hai |
 | `// android-only:` marker | runner ko batata hai kaun si file JVM par compile nahi ho sakti |

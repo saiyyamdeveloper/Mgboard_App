@@ -232,6 +232,14 @@ private fun LivePreview(theme: String, onThemeChange: (String) -> Unit) {
                 refreshTick()
             }) { Text("Panel: " + model.toolbarPanel.name.lowercase()) }
             OutlinedButton(onClick = {
+                model.openTranslatePanel(); refreshTick()
+            }) { Text("🗣 " + (settings.uiHindi.let { if (it) "अनुवाद" else "Translate" })) }
+            OutlinedButton(onClick = {
+                settings.previewEditorSupportsMedia = !settings.previewEditorSupportsMedia
+                model.openToolbarPanel(com.mgboard.keyboard.toolbar.ToolbarPanel.EMOJI)
+                refreshTick()
+            }) { Text(if (settings.previewEditorSupportsMedia) "😊 Media ON" else "😊 Media OFF") }
+            OutlinedButton(onClick = {
                 settings.addClipboardEntry("नमस्ते MgBoard"); settings.addClipboardEntry("𑴌𑴳𑴛")
                 model.openToolbarPanel(com.mgboard.keyboard.toolbar.ToolbarPanel.CLIPBOARD); refreshTick()
             }) { Text("📋 Clipboard") }

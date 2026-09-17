@@ -79,6 +79,41 @@ class KeyboardModel(
         /** Undo/redo chips: "when user edits existing text" */
         val isEditingExistingText: Boolean get() = false
 
+        // ── translate (toolbar-project ka TRANSLATE access point) ──────────────
+        /**
+         * ML Kit on-device translation engine. `null` = engine available nahi
+         * (panel gated reason ke saath khulta hai — hide-nothing).
+         */
+        fun translateEngine(): com.mgboard.keyboard.translate.TranslateEngine? = null
+
+        /** Saved source/target language codes (BCP-47, ML Kit ke codes). */
+        fun translateSrcCode(): String? = null
+        fun translateTgtCode(): String? = null
+        fun saveTranslateLanguages(src: String, tgt: String) {}
+
+        /** Model download sirf Wi-Fi par (default true — ~30 MB per language). */
+        val translateWifiOnly: Boolean get() = true
+
+        /** Async debounce ke liye timer (IME `Handler(Looper.getMainLooper())` deta hai). */
+        fun scheduleTimer(delayMs: Long, runnable: () -> Unit): Long = 0L
+        fun cancelTimer(token: Long) {}
+
+        // ── GIF / Stickers (toolbar-project §5.1 ke expression tabs) ────────────
+        /** Editor is MIME ko Commit Content API se accept karta hai kya. */
+        fun mediaEditorSupports(mime: String): Boolean = false
+
+        /** Bundled sticker editor ko bhejo. true = editor ne accept kiya. */
+        fun commitBundledSticker(sticker: com.mgboard.keyboard.media.BundledSticker): Boolean = false
+
+        /** Network media (Klipy) editor ko bhejo — caller background thread par. */
+        fun commitRemoteMedia(item: com.mgboard.keyboard.media.MediaItem): Boolean = false
+
+        /** Klipy API key (BuildConfig/prefs se). Khali = GIF search gated (setup hint). */
+        fun klipyAppKey(): String = ""
+
+        /** Klipy search/trending fetch — background thread par, result callback. */
+        fun klipyFetch(url: String, onResult: (com.mgboard.keyboard.media.MediaPage?) -> Unit) {}
+
         fun setPinnedIds(ids: List<String>)
         /** off → right → left → off (web: cycleOneHanded). Naya mode return karta hai. */
         fun cycleOneHanded(): String
@@ -196,6 +231,10 @@ class KeyboardModel(
             com.mgboard.keyboard.toolbar.ToolbarAction.SETTINGS -> settings.onSettingsChanged()
             com.mgboard.keyboard.toolbar.ToolbarAction.IME_ACTION -> settings.performImeAction()
             com.mgboard.keyboard.toolbar.ToolbarAction.IME_SWITCH -> settings.showImePicker()
+            com.mgboard.keyboard.toolbar.ToolbarAction.TRANSLATE -> {
+                translateMode = true
+                openTranslatePanel()
+            }
             com.mgboard.keyboard.toolbar.ToolbarAction.FEATURES_MENU -> gridOpen = !gridOpen
             com.mgboard.keyboard.toolbar.ToolbarAction.MORE_KEYBOARD_OPTIONS ->
                 openToolbarPanel(com.mgboard.keyboard.toolbar.ToolbarPanel.MORE_KEYBOARD_OPTIONS)
@@ -208,6 +247,10 @@ class KeyboardModel(
 
     /** Panel band karo (Gboard: "Close X panel"). */
     fun closeToolbarPanel() {
+        if (toolbarPanel == com.mgboard.keyboard.toolbar.ToolbarPanel.TRANSLATE) {
+            translateMode = false
+            translate.release()
+        }
         toolbarPanel = com.mgboard.keyboard.toolbar.ToolbarPanel.NONE
         bump()
     }
@@ -220,15 +263,91 @@ class KeyboardModel(
 
     /** Emoji/symbol/clipboard pick → text insert (maujooda pipeline). */
     fun insertFromPanel(text: String) {
+        if (translateMode) { appendTranslateText(text); return }
         engine.insertCharacter(text)
         bump()
     }
 
     /** Clipboard panel se paste — text insert + history mein save. */
     fun pasteFromClipboard(text: String) {
+        if (translateMode) { appendTranslateText(text); return }
         engine.insertCharacter(text)
         settings.addClipboardEntry(text)
         clipboardRevision++
+        bump()
+    }
+
+    // ── translate panel (ML Kit on-device, hi ↔ en) ──────────────────────────
+
+    /**
+     * Gboard ka translate panel keyboard ke *upar* khulta hai aur keyboard type
+     * karte rehta hai — typed text editor mein nahi, translate buffer mein jaata
+     * hai. ✓ dabane par translated text editor mein insert hota hai.
+     */
+    var translateMode: Boolean = false
+        private set
+
+    val translate: com.mgboard.keyboard.translate.TranslateController by lazy {
+        com.mgboard.keyboard.translate.TranslateController(
+            engineProvider = { settings.translateEngine() },
+            scheduleTimer = { d, r -> settings.scheduleTimer(d, r) },
+            cancelTimer = { settings.cancelTimer(it) },
+            uiHindi = settings.uiHindi,
+        ).apply {
+            onChanged = { bump() }
+            onInsert = { text ->
+                // ✓ — translated text editor mein (maujooda insert pipeline se)
+                translateMode = false
+                closeToolbarPanel()
+                engine.insertTextBulk(text)
+                bump()
+            }
+        }
+    }
+
+    /** Translate panel khula → source text editor se utha lo (Gboard jaisa). */
+    fun openTranslatePanel() {
+        openToolbarPanel(com.mgboard.keyboard.toolbar.ToolbarPanel.TRANSLATE)
+        translateMode = true
+        val s = translate.session
+        s.src = com.mgboard.keyboard.translate.TranslateLang.fromCode(settings.translateSrcCode())
+            ?: com.mgboard.keyboard.translate.TranslateLang.defaultPair(settings.uiHindi).first
+        s.tgt = com.mgboard.keyboard.translate.TranslateLang.fromCode(settings.translateTgtCode())
+            ?: com.mgboard.keyboard.translate.TranslateLang.defaultPair(settings.uiHindi).second
+        translate.refreshModelStatus()
+        bump()
+    }
+
+    fun closeTranslatePanel() {
+        translateMode = false
+        translate.release()
+        closeToolbarPanel()
+    }
+
+    /** Translate mode mein typed text buffer mein jaa. */
+    fun appendTranslateText(text: String) {
+        translate.onInput(translate.session.input + text)
+        bump()
+    }
+
+    /** Translate mode mein backspace — buffer ka aakhri code point hatao. */
+    fun translateBackspace() {
+        val cur = translate.session.input
+        if (cur.isEmpty()) { closeTranslatePanel(); return }
+        val cps = cur.codePointCount(0, cur.length)
+        val cut = cur.offsetByCodePoints(cur.length, -1)
+        translate.onInput(cur.substring(0, cut))
+        if (cps <= 1) translate.onInput("")
+        bump()
+    }
+
+    /** Translate buffer ka content ✓ ke bina seedha insert karo (escape hatch). */
+    fun insertTranslateInput() {
+        val text = translate.session.input
+        if (text.isEmpty()) return
+        translateMode = false
+        closeToolbarPanel()
+        engine.insertTextBulk(text)
         bump()
     }
 
@@ -355,9 +474,12 @@ class KeyboardModel(
             KeyKind.MATRA -> engine.onMatra(spec.glyph)
             KeyKind.YUKT -> engine.onYukt()
             KeyKind.VOCALIC_R -> engine.onVocalicRTap()
-            KeyKind.BACKSPACE -> engine.backspace()
-            KeyKind.ENTER -> engine.onEnter()
-            KeyKind.SPACE -> engine.onSpace()
+            KeyKind.BACKSPACE ->
+                if (translateMode) translateBackspace() else engine.backspace()
+            KeyKind.ENTER ->
+                if (translateMode) translate.onInput(translate.session.input + "\n") else engine.onEnter()
+            KeyKind.SPACE ->
+                if (translateMode) appendTranslateText(" ") else engine.onSpace()
             KeyKind.PERIOD -> engine.insertCharacter(spec.glyph)
             KeyKind.TOGGLE_123 -> engine.onTogglePanel()
             KeyKind.EMOJI -> settings.toast("🙂 Emoji panel — web app mein available")
@@ -374,6 +496,12 @@ class KeyboardModel(
 
     /** QWERTY letter: shift machine se case decide hota hai (web: onQwertyLetterTap). */
     private fun onChar(glyph: String) {
+        if (translateMode) {
+            val g = if (engine.kbMode == KbMode.QWERTY && glyph.length == 1 && glyph[0].isLetter())
+                shift.applyTo(glyph) else glyph
+            appendTranslateText(g)
+            return
+        }
         if (engine.kbMode == KbMode.QWERTY && glyph.length == 1 && glyph[0].isLetter()) {
             engine.insertCharacter(shift.applyTo(glyph))
         } else {

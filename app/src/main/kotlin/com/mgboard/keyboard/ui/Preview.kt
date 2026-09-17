@@ -96,6 +96,45 @@ class PreviewSettingsSource(
     override fun editorPaste() = onToast("Paste (preview)")
     override fun setToolbarVisible(v: Boolean) { toolbarVisible = v }
 
+    // ── GIF/Stickers (preview: editor support simulate + fake commit) ──────
+    var previewEditorSupportsMedia = true
+    var lastCommittedMedia: String? = null
+    override fun mediaEditorSupports(mime: String): Boolean = previewEditorSupportsMedia
+    override fun commitBundledSticker(sticker: com.mgboard.keyboard.media.BundledSticker): Boolean {
+        lastCommittedMedia = sticker.id
+        onToast("Sticker sent: " + sticker.title)
+        return previewEditorSupportsMedia
+    }
+    override fun commitRemoteMedia(item: com.mgboard.keyboard.media.MediaItem): Boolean {
+        lastCommittedMedia = item.slug
+        onToast("GIF sent: " + item.title)
+        return previewEditorSupportsMedia
+    }
+    override fun klipyAppKey(): String = ""       // preview mein bundled pack hi live
+    override fun klipyFetch(url: String, onResult: (com.mgboard.keyboard.media.MediaPage?) -> Unit) {
+        onResult(null)
+    }
+
+    // ── translate (preview ke liye fake engine — device/ML Kit ke bina panel chale) ──
+    override fun translateEngine(): com.mgboard.keyboard.translate.TranslateEngine = PreviewTranslateEngine
+    override val translateWifiOnly: Boolean get() = true
+    override fun translateSrcCode(): String? = null
+    override fun translateTgtCode(): String? = null
+    override fun saveTranslateLanguages(src: String, tgt: String) {}
+
+    /** Preview mein debounce ke liye turant chalane wala timer (UI test aasaan). */
+    private val timers = HashMap<Long, () -> Unit>()
+    private var timerToken = 0L
+    override fun scheduleTimer(delayMs: Long, runnable: () -> Unit): Long {
+        val t = ++timerToken
+        timers[t] = runnable
+        android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
+            timers.remove(t)?.invoke()
+        }, delayMs)
+        return t
+    }
+    override fun cancelTimer(token: Long) { timers.remove(token) }
+
     override fun setPinnedIds(ids: List<String>) { pinnedIds = ids }
 
     override fun cycleOneHanded(): String {
@@ -191,4 +230,58 @@ class PreviewVoiceHost(
     var onToast: (String) -> Unit = {}
 }
 
+/**
+ * Preview/launcher ke liye fake translate engine — ML Kit device par hi chalta hai,
+ * par panel ka UI (pickers, ⇄ swap, progress, ✓ insert, gated reasons) bina device
+ * ke verify karna zaroori hai. Chhota built-in dictionary + simulated download.
+ */
+private object PreviewTranslateEngine : com.mgboard.keyboard.translate.TranslateEngine {
+    private val ready = mutableSetOf<Pair<String, String>>()
+    private val dict = mapOf(
+        "hello" to "\u0928\u092E\u0938\u094D\u0924\u0947",
+        "how are you" to "\u0906\u092A \u0915\u0948\u0938\u0947 \u0939\u0948\u0902",
+        "good morning" to "\u0938\u0941\u092A\u094D\u0930\u092D\u093E\u0924",
+        "thank you" to "\u0927\u0928\u094D\u092F\u0935\u093E\u0926",
+        "\u0928\u092E\u0938\u094D\u0924\u0947" to "hello",
+        "\u0906\u092A \u0915\u0948\u0938\u0947 \u0939\u0948\u0902" to "how are you",
+        "\u0927\u0928\u094D\u092F\u0935\u093E\u0926" to "thank you",
+    )
 
+    override fun isModelReady(src: com.mgboard.keyboard.translate.TranslateLang,
+                             tgt: com.mgboard.keyboard.translate.TranslateLang) =
+        (src.code to tgt.code) in ready
+
+    override fun downloadModel(src: com.mgboard.keyboard.translate.TranslateLang,
+                               tgt: com.mgboard.keyboard.translate.TranslateLang,
+                               onProgress: (Float) -> Unit,
+                               onDownloaded: (Boolean) -> Unit) {
+        // simulated progress — UI ke LinearProgressIndicator ko test karne ke liye
+        val h = android.os.Handler(android.os.Looper.getMainLooper())
+        var p = 0f
+        fun step() {
+            p += 0.25f
+            onProgress(p.coerceAtMost(1f))
+            if (p < 1f) h.postDelayed({ step() }, 220)
+            else {
+                ready += src.code to tgt.code
+                ready += tgt.code to src.code
+                onDownloaded(true)
+            }
+        }
+        h.postDelayed({ step() }, 220)
+    }
+
+    override fun translate(src: com.mgboard.keyboard.translate.TranslateLang,
+                           tgt: com.mgboard.keyboard.translate.TranslateLang,
+                           text: String, onResult: (String?) -> Unit) {
+        val h = android.os.Handler(android.os.Looper.getMainLooper())
+        val key = text.trim().lowercase()
+        val out = dict[key]
+            ?: if (tgt == com.mgboard.keyboard.translate.TranslateLang.HINDI)
+                "[" + src.code + "\u2192" + tgt.code + "] " + text
+               else "[preview translation] " + text
+        h.postDelayed({ onResult(out) }, 260)
+    }
+
+    override fun close() {}
+}

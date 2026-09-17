@@ -92,6 +92,7 @@ enum class ToolbarAction {
     MORE_KEYBOARD_OPTIONS,
     ONE_HANDED,
     THEME,
+    TRANSLATE,      // Gboard ka translate panel — MgBoard mein ML Kit on-device se live
 }
 
 /**
@@ -118,12 +119,17 @@ object AccessPoints {
         panel = ToolbarPanel.CLIPBOARD,
     )
 
+    /**
+     * Translate — research mein Gboard ke liye "gated" tha (backend chahiye tha).
+     * Ab **ML Kit on-device translation** (`hi` ↔ `en` officially supported) se yeh
+     * live hai, isliye gate hata diya. Engine unavailable hone par panel khud
+     * Gboard ka verbatim reason dikhata hai (`TranslateError.NO_ENGINE`) — hide-nothing.
+     * Gboard ke UI rules: source picker / ⇄ swap / target picker / ✓ insert.
+     */
     val TRANSLATE = AccessPoint(
         id = "translate", glyph = "🗣", en = "Translate", hi = "अनुवाद",
         panel = ToolbarPanel.TRANSLATE,
-        gated = true,
-        gateReasonEn = "Can't use this tool at the moment. Please try again later.",
-        gateReasonHi = "इस समय इस टूल का इस्तेमाल नहीं किया जा सकता. कृपया बाद में फिर कोशिश करें.",
+        action = ToolbarAction.TRANSLATE,
     )
 
     val WRITING_TOOLS = AccessPoint(
@@ -436,12 +442,31 @@ object SymbolPanelData {
     val EXPRESSION_TABS = listOf("Emoji", "GIF", "Stickers", "Favorites", "Recents")
 
     /**
-     * Kaun sa tab gated hai (hide-nothing): GIF/Stickers ko backend chahiye,
-     * Emoji/Favorites/Recents poori tarah chalte hain.
+     * Tab kab gated dikhe (hide-nothing: tab chhupta nahi, wajah batata hai).
+     *
+     * Research: TRANSLATE-GIF-FEASIBILITY.md §2.3 — **Commit Content API** mein
+     * editor ko MIME accept karna hota hai (`EditorInfo.contentMimeTypes`). Jis
+     * field ne opt-in nahi kiya, wahan GIF/sticker jaata hi nahi — Gboard khud
+     * yahi toast dikhata hai: *"The text field does not support GIF insertion
+     * from the keyboard"*.
+     *
+     *  - Stickers: **bundled pack** hamesha ready hai (offline tier) — sirf editor
+     *    support gate hai
+     *  - GIF: editor support + Klipy key (key khali ho to panel ke andar setup
+     *    hint dikhta hai, yahan nahi — tab khulta hai)
+     *  - Emoji/Favorites/Recents: kabhi gated nahi
      */
-    fun tabGateReason(tab: String, hindi: Boolean): String? = when (tab) {
-        "GIF", "Stickers" -> if (hindi) "इस ऐप में यह कमांड उपलब्ध नहीं है"
-                             else "Command not available in this app"
+    fun tabGateReason(
+        tab: String,
+        hindi: Boolean,
+        editorSupportsImage: Boolean = false,
+    ): String? = when (tab) {
+        "GIF" -> if (!editorSupportsImage)
+            com.mgboard.keyboard.media.MediaAvailability.EditorUnsupported("image/gif").reason(hindi)
+        else null
+        "Stickers" -> if (!editorSupportsImage)
+            com.mgboard.keyboard.media.MediaAvailability.EditorUnsupported("image/png").reason(hindi)
+        else null
         else -> null
     }
 }

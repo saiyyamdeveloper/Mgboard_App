@@ -72,6 +72,9 @@ class MgBoardIme : InputMethodService(), KeyboardHost {
         // ban jaata hai, isliye onCreate() mein reference karna safe hai.
         settingsSource.editorActions = editorActions
         settingsSource.imePicker = { showSystemImePicker() }
+        // GIF/Stickers: Commit Content API ko current editor ka EditorInfo + connection chahiye
+        settingsSource.currentEditorInfo = { currentInputEditorInfo }
+        settingsSource.currentInputConnection = { currentInputConnection }
         model = KeyboardModel(engine, settingsSource)
         model.onChange = { tick++ }
         // toolbar ka 🎤 access point → voice toolbar (voice-pill-project se wire)

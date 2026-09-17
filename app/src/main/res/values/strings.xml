@@ -275,4 +275,38 @@
     <string name="tb_more_keyboard_options_opened">More keyboard options opened</string>
     <string name="tb_more_keyboard_options_closed">More keyboard options closed</string>
     <string name="tb_show_toolbar_while_typing">Show the keyboard toolbar while typing</string>
+
+    <!-- ═══ translate panel (ML Kit on-device, hi ↔ en) ═══ -->
+    <string name="tr_detect_language">Detect language</string>
+    <string name="tr_swap_languages">Swap languages</string>
+    <string name="tr_insert_translation">Insert translation</string>
+    <string name="tr_type_to_translate">Type below to translate</string>
+    <string name="tr_translating">Translating…</string>
+    <string name="tr_downloading_model">Downloading translation model…</string>
+    <string name="tr_download_model">Download model (~30 MB, once)</string>
+    <string name="tr_wifi_only">Wi-Fi only</string>
+    <string name="tr_any_network">Any network</string>
+    <string name="tr_on_device">On-device · text never leaves this device</string>
+    <string name="tr_via_english">Translated via English</string>
+    <string name="tr_try_again">Try again</string>
+    <string name="tr_no_engine">Translation isn’t available on this device.</string>
+    <string name="tr_download_failed">Couldn’t download the translation model. Check your connection and try again.</string>
+    <string name="tr_tool_unavailable">Can’t use this tool at the moment. Please try again later.</string>
+    <string name="tr_romanized_unsupported">Romanized Hindi isn’t supported yet — switch the keyboard to हिन्दी for best results.</string>
+    <string name="tr_model_size_summary">Each language model is about 30 MB and is downloaded once. After that translation works offline.</string>
+    <string name="tr_open_panel">Open translate panel</string>
+    <string name="tr_close_panel">Close translate panel</string>
+
+    <!-- ═══ GIF / Stickers (expression panel, Commit Content API) ═══ -->
+    <string name="md_search_stickers">Search stickers</string>
+    <string name="md_search_gifs">Search GIFs (press enter)</string>
+    <string name="md_no_stickers">No stickers found</string>
+    <string name="md_no_gifs">No GIFs found</string>
+    <string name="md_field_unsupported">The text field does not support GIF insertion from the keyboard</string>
+    <string name="md_klipy_hint">Add a Klipy API key for GIF search (Settings → Klipy API key). Bundled stickers keep working below.</string>
+    <string name="md_klipy_where">Get a free key at partner.klipy.com → API Keys, then paste in Settings → Klipy API key.</string>
+    <string name="md_attribution_klipy">GIFs · KLIPY</string>
+    <string name="md_try_again">Try again</string>
+    <string name="md_open_gif_tab">Open GIF tab</string>
+    <string name="md_open_stickers_tab">Open stickers tab</string>
 </resources>

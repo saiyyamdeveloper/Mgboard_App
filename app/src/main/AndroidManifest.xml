@@ -54,5 +54,19 @@
                 android:name="android.view.im"
                 android:resource="@xml/method" />
         </service>
+            <!--
+          Commit Content API (GIF/stickers) ke liye FileProvider — media delivery buffer
+          (cacheDir/media/) ko content:// URI se editor tak pahunchata hai.
+          Research: docs/research/toolbar-project/TRANSLATE-GIF-FEASIBILITY.md §2.3
+        -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.mediaprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/media_paths" />
+        </provider>
     </application>
 </manifest>

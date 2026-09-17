@@ -161,3 +161,64 @@ Har panel ka header + footer Gboard ke pattern se: *"Open X"* / *"Close X"* /
 - [ ] `performEditorAction` har editor mein (Chrome, WhatsApp, Notes)
 - [ ] TalkBack: access-point labels + panel open/close announcements
 - [ ] Landscape/foldable par capacity 6 aur strip scroll
+
+---
+
+## 9. Translate panel + GIF/Stickers (research round 2, 2026-09-17)
+
+User ke do sawaalon ka jawab web research se aaya (`TRANSLATE-GIF-FEASIBILITY.md`),
+phir user-confirmed decisions par implement hua:
+
+| Decision (user-confirmed) | Kya chuna |
+|---|---|
+| Translate engine | **ML Kit on-device** (`com.google.mlkit:translate:17.0.3`) — primary, koi fallback nahi |
+| GIF/Stickers | **Bundled sticker pack + Klipy search** (placeholder key mode) |
+| Klipy key | **Placeholder + setup screen** — key `local.properties`/env `KLIPY_APP_KEY` se, repo mein commit nahi |
+| Order | Translate pehle |
+
+### 9.1 Translate — kya bana
+
+- `translate/TranslateModel.kt` (**pure Kotlin**): 9 languages (ML Kit list se; `hi`+`en`
+  official), phases, script detection (romanized-Hindi honest gate), `TranslateController`
+  (300 ms debounce, stale-result discard, swap, auto-detect, model download states)
+- `ime/MlKitTranslateEngine.kt`: ML Kit implementation — per-pair `Translator` cache,
+  Wi-Fi-only download default, `Translator.close()` lifecycle
+- `ui/TranslatePanel.kt`: Gboard layout — `[source ▾] ⇄ [target ▾]`, output area,
+  ✓ insert, "On-device · text never leaves this device" badge, "via English" pivot note
+- Keyboard routing: translate mode mein typed text **editor mein nahi, translate buffer
+  mein** jaata hai (Gboard jaisa); ✓ par `insertTextBulk` se editor mein
+- Gating: engine unavailable / download fail / romanized Hindi — sab verbatim reasons
+
+### 9.2 GIF/Stickers — kya bana
+
+- `media/BundledStickers.kt` (generated: `scripts/gen_stickers.py` ← `res/raw/stickers_manifest.json`):
+  **12 original stickers**, bundled Gondi font se draw (`scripts/stickers` generator nahi —
+  PIL script se banaye, ~50 KB total), EN+HI tags se search, offline
+- `media/MediaModel.kt` (**pure Kotlin**): `MediaItem/Page/Availability`, `KlipyApi`
+  (URL rules: per_page 8–50, locale, percent-encoding; response parse), `MiniJson`
+  (dependency-free parser)
+- `media/MediaCommitController.kt`: **Commit Content API** pipeline — editor MIME opt-in
+  check, FileProvider (`${applicationId}.mediaprovider`, `res/xml/media_paths.xml`),
+  transient delivery buffer (`cacheDir/media/`, prune 12), `INPUT_CONTENT_GRANT_READ_URI_PERMISSION`
+- `ui/MediaPanels.kt`: Stickers grid (Coil, raw res) + GIF tab (Klipy trending/search,
+  explicit submit — testing key 100 req/hr; animated GIF decode `coil-gif`;
+  "GIFs · KLIPY" attribution; key khali ho to setup hint)
+- Gating matrix: editor support nahi → Gboard verbatim
+  *"The text field does not support GIF insertion from the keyboard"*; key nahi → setup
+  hint; offline → Gboard verbatim unavailable message. Bundled pack hamesha ready.
+
+### 9.3 Naye dependencies
+
+| Dependency | Kaam | Size impact |
+|---|---|---|
+| `com.google.mlkit:translate:17.0.3` | on-device translation | APK ~2–3 MB + models 30 MB/language (download) |
+| `io.coil-kt:coil-compose:2.7.0` + `coil-gif` | animated GIF render in grid | ~1 MB |
+
+Koi naya **permission** nahi juda (INTERNET pehle se tha — ML Kit model + Klipy ke liye).
+
+### 9.4 Tests
+
+`TranslateTests.kt` (87) + `MediaTests.kt` (87) — total suite **904/904 PASS**:
+translate state machine, debounce/stale-discard, model download fail paths, script
+detection, language inventory; sticker pack data + search, Klipy URL/parse rules,
+MiniJson, availability reasons.

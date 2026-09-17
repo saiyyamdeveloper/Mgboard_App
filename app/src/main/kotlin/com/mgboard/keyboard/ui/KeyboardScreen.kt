@@ -119,8 +119,16 @@ fun KeyboardScreen(
                 KeyboardToolbar(model = model, host = host)
             }
 
-            // panel khula ho to keyboard body uski jagah panel dikhata hai (Gboard)
-            if (model.toolbarPanel != com.mgboard.keyboard.toolbar.ToolbarPanel.NONE) {
+            // Gboard ka translate panel keyboard ke *upar* khulta hai — keyboard
+            // type karte rehta hai (typed text translate buffer mein jaata hai).
+            if (model.toolbarPanel == com.mgboard.keyboard.toolbar.ToolbarPanel.TRANSLATE) {
+                TranslatePanel(model)
+            }
+
+            // baaki panels: keyboard body uski jagah panel dikhata hai (Gboard)
+            if (model.toolbarPanel != com.mgboard.keyboard.toolbar.ToolbarPanel.NONE &&
+                model.toolbarPanel != com.mgboard.keyboard.toolbar.ToolbarPanel.TRANSLATE
+            ) {
                 Box(Modifier.fillMaxWidth().height(keyboardHeight)) {
                     ToolbarPanelHost(model = model, host = host)
                 }

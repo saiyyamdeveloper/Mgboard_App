@@ -114,14 +114,18 @@ object ToolbarTests {
 
         // hide-nothing: gated access points bhi inventory mein hain + verbatim reason
         val gated = AccessPoints.ALL.filter { it.gated }
-        T.eq("gated access points = 4 (translate/writingTools/proofread/quickInsert)",
-            gated.map { it.id }, listOf("translate", "writingTools", "proofread", "quickInsert"))
+        // translate ab gated NAHI — ML Kit on-device engine se live hai
+        // (research: TRANSLATE-GIF-FEASIBILITY.md §1.1: `hi`+`en` officially supported)
+        T.eq("gated access points = 3 (writingTools/proofread/quickInsert)",
+            gated.map { it.id }, listOf("writingTools", "proofread", "quickInsert"))
+        T.ok("translate access point ab live hai (gated nahi)", !AccessPoints.TRANSLATE.gated)
+        T.eq("translate ka action = TRANSLATE", AccessPoints.TRANSLATE.action, ToolbarAction.TRANSLATE)
         T.eq("har gated par reason", gated.all { !it.gateReasonEn.isNullOrBlank() }, true)
         T.eq("Proofread reason (Gboard verbatim)", AccessPoints.PROOFREAD.gateReasonEn,
             "Can't proofread text in this field")
         T.eq("Quick Insert reason (Gboard verbatim)", AccessPoints.QUICK_INSERT.gateReasonEn,
             "Disabled because opt-in is disabled")
-        T.eq("Translate/Writing Tools reason (Gboard verbatim)", AccessPoints.TRANSLATE.gateReasonEn,
+        T.eq("Writing Tools reason (Gboard verbatim)", AccessPoints.WRITING_TOOLS.gateReasonEn,
             "Can't use this tool at the moment. Please try again later.")
 
         // actions vs panels
@@ -365,12 +369,21 @@ object ToolbarTests {
         T.eq("Emoji tab chalta hai (gate nahi)", SymbolPanelData.tabGateReason("Emoji", false), null)
         T.eq("Favorites tab chalta hai", SymbolPanelData.tabGateReason("Favorites", true), null)
         T.eq("Recents tab chalta hai", SymbolPanelData.tabGateReason("Recents", false), null)
-        T.eq("GIF gated (hide-nothing)", SymbolPanelData.tabGateReason("GIF", false),
-            "Command not available in this app")
-        T.eq("Stickers gated", SymbolPanelData.tabGateReason("Stickers", false),
-            "Command not available in this app")
-        T.eq("GIF gate reason HI", SymbolPanelData.tabGateReason("GIF", true),
-            "इस ऐप में यह कमांड उपलब्ध नहीं है")
+        // GIF/Stickers ab sirf tab gated hain jab EDITOR Commit Content API se opt-in
+        // na kare — warna bundled stickers / Klipy GIF live hain (research §2.3)
+        T.eq("GIF gated jab editor support nahi (Gboard verbatim toast)",
+            SymbolPanelData.tabGateReason("GIF", false, editorSupportsImage = false),
+            "The text field does not support GIF insertion from the keyboard")
+        T.eq("Stickers gated jab editor support nahi",
+            SymbolPanelData.tabGateReason("Stickers", false, editorSupportsImage = false),
+            "The text field does not support GIF insertion from the keyboard")
+        T.eq("GIF gate reason HI (field unsupported)",
+            SymbolPanelData.tabGateReason("GIF", true, false),
+            com.mgboard.keyboard.media.MediaAvailability.EditorUnsupported("image/gif").reason(true))
+        T.eq("editor support ho to GIF tab khulta hai (key gate panel ke andar hai)",
+            SymbolPanelData.tabGateReason("GIF", false, editorSupportsImage = true), null)
+        T.eq("editor support ho to Stickers tab khulta hai (bundled pack offline ready)",
+            SymbolPanelData.tabGateReason("Stickers", true, editorSupportsImage = true), null)
 
         // emoji data KeyboardData mein already hai (web se generated)
         T.eq("emoji categories = 9", com.mgboard.keyboard.data.EmojiData.CATEGORIES.size, 9)

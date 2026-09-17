@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  MediaCommitController ke Commit Content API ke liye FileProvider paths.
+  `cacheDir/media/` = transient delivery buffer (GIF/sticker editor ko bhejne se
+  pehle yahan rukta hai; network URI commit nahi hoti — Android docs).
+-->
+<paths>
+    <cache-path name="media" path="media/" />
+</paths>

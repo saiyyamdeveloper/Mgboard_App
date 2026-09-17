@@ -201,8 +201,11 @@ fun ToolbarPanelHost(model: KeyboardModel, host: KeyboardHost) {
             ToolbarPanel.EDIT_MENU -> EditMenuPanel(model)
             ToolbarPanel.MORE_KEYBOARD_OPTIONS -> MoreKeyboardOptionsPanel(model)
             ToolbarPanel.SELECT_MODE -> GatedPanel(model, panel)
-            ToolbarPanel.TRANSLATE, ToolbarPanel.WRITING_TOOLS, ToolbarPanel.PROOFREAD ->
-                GatedPanel(model, panel)
+            // TRANSLATE KeyboardScreen mein keyboard ke upar render hota hai
+            // (Gboard pattern: panel + keyboard dono visible, typing translate
+            //  buffer mein jaati hai) — isliye yahan kuch nahi.
+            ToolbarPanel.TRANSLATE -> Unit
+            ToolbarPanel.WRITING_TOOLS, ToolbarPanel.PROOFREAD -> GatedPanel(model, panel)
             ToolbarPanel.FEATURES_MENU -> FeaturesMenuPanel(model)
             ToolbarPanel.NONE -> Unit
         }

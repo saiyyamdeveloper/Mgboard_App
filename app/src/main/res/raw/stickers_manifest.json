@@ -1,0 +1,190 @@
+{
+ "version": 1,
+ "provider": "bundled",
+ "attribution": "MgBoard original sticker pack — Masaram Gondi font (OFL 1.1), drawn in-app",
+ "size": 256,
+ "packs": [
+  {
+   "id": "mgboard_reactions",
+   "title": "MgBoard Reactions",
+   "hi": "MgBoard रिएक्शन",
+   "items": [
+    {
+     "id": "sticker_hi",
+     "res": "raw/sticker_hi",
+     "title": "Hi",
+     "hi": "नमस्ते",
+     "tags": [
+      "hi",
+      "hello",
+      "namaste",
+      "नमस्ते",
+      "hey",
+      "greet"
+     ],
+     "mime": "image/png"
+    },
+    {
+     "id": "sticker_thanks",
+     "res": "raw/sticker_thanks",
+     "title": "Thanks",
+     "hi": "धन्यवाद",
+     "tags": [
+      "thanks",
+      "thank you",
+      "dhanyavad",
+      "धन्यवाद",
+      "shukriya"
+     ],
+     "mime": "image/png"
+    },
+    {
+     "id": "sticker_wow",
+     "res": "raw/sticker_wow",
+     "title": "Wow",
+     "hi": "वाह",
+     "tags": [
+      "wow",
+      "amazing",
+      "वाह",
+      "great",
+      "awesome"
+     ],
+     "mime": "image/png"
+    },
+    {
+     "id": "sticker_ok",
+     "res": "raw/sticker_ok",
+     "title": "OK",
+     "hi": "ठीक है",
+     "tags": [
+      "ok",
+      "ठीक",
+      "done",
+      "check",
+      "yes ok",
+      "theek"
+     ],
+     "mime": "image/png"
+    },
+    {
+     "id": "sticker_yes",
+     "res": "raw/sticker_yes",
+     "title": "Yes",
+     "hi": "हाँ",
+     "tags": [
+      "yes",
+      "हाँ",
+      "haan",
+      "thumbs up",
+      "agree",
+      "sure"
+     ],
+     "mime": "image/png"
+    },
+    {
+     "id": "sticker_no",
+     "res": "raw/sticker_no",
+     "title": "No",
+     "hi": "नहीं",
+     "tags": [
+      "no",
+      "नहीं",
+      "nahi",
+      "cross",
+      "deny",
+      "nope"
+     ],
+     "mime": "image/png"
+    },
+    {
+     "id": "sticker_love",
+     "res": "raw/sticker_love",
+     "title": "Love",
+     "hi": "प्यार",
+     "tags": [
+      "love",
+      "प्यार",
+      "heart",
+      "pyar",
+      "dil",
+      "like"
+     ],
+     "mime": "image/png"
+    },
+    {
+     "id": "sticker_haha",
+     "res": "raw/sticker_haha",
+     "title": "Haha",
+     "hi": "हाहा",
+     "tags": [
+      "haha",
+      "laugh",
+      "funny",
+      "हासी",
+      "lol",
+      "मज़ा"
+     ],
+     "mime": "image/png"
+    },
+    {
+     "id": "sticker_hmm",
+     "res": "raw/sticker_hmm",
+     "title": "Hmm",
+     "hi": "हम्म",
+     "tags": [
+      "hmm",
+      "thinking",
+      "सोच",
+      "हम्म",
+      "confused",
+      "maybe"
+     ],
+     "mime": "image/png"
+    },
+    {
+     "id": "sticker_sorry",
+     "res": "raw/sticker_sorry",
+     "title": "Sorry",
+     "hi": "माफ़ करें",
+     "tags": [
+      "sorry",
+      "माफ़",
+      "maaf",
+      "apology",
+      "oops"
+     ],
+     "mime": "image/png"
+    },
+    {
+     "id": "sticker_morning",
+     "res": "raw/sticker_morning",
+     "title": "Good morning",
+     "hi": "सुप्रभात",
+     "tags": [
+      "good morning",
+      "सुप्रभात",
+      "morning",
+      "suprabhat",
+      "hello morning"
+     ],
+     "mime": "image/png"
+    },
+    {
+     "id": "sticker_night",
+     "res": "raw/sticker_night",
+     "title": "Good night",
+     "hi": "शुभ रात्रि",
+     "tags": [
+      "good night",
+      "शुभ रात्रि",
+      "night",
+      "sleep",
+      "shubh ratri"
+     ],
+     "mime": "image/png"
+    }
+   ]
+  }
+ ]
+}

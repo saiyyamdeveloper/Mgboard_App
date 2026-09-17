@@ -8,7 +8,7 @@ hain) aur **Gradle build** (Android Studio / local machine par).
 ## 1. Pure-logic JVM tests — `./scripts/run_jvm_tests.sh`
 
 Engine, converter, layouts, grid-menu, QWERTY shift, timings aur **poori voice-toolbar
-state machine** — sab plain JVM par compile + run hote hain. **679 assertions.**
+state machine** — sab plain JVM par compile + run hote hain. **904 assertions.**
 
 ```bash
 ./scripts/run_jvm_tests.sh          # kotlinc + java chahiye
@@ -46,6 +46,8 @@ Kya cover hota hai:
 | `AccessPoints` / `ToolbarPanel` | 17 access points ka inventory, verbatim labels + permission prompts, 11 panels ke `Open X`/`Close X` labels |
 | `SuggestionStrip` | capacity 3–8 clamp (5/6 default), semicolon order, overflow → features menu, right-side fixed access points, 14 Gboard config flags, undo/redo chips ka "existing text" rule |
 | `SymbolPanel*` | Gboard ki 8 categories (APK order), shapes/emoticons grids, expression panel ke 5 tabs + GIF/Stickers gating |
+| `TranslateLang` / `TranslateController` | ML Kit supported languages (`hi`/`en` official), English-pivot rule, script detection (romanized-Hindi gate), swap/auto-detect, 300 ms debounce, stale-result discard, model download states |
+| `BundledStickers` / `KlipyApi` / `MiniJson` | 12-sticker pack (search EN+HI tags), Klipy URL rules (per_page 8–50, locale, encoding), response parse (sm.webp preview / md.gif full), availability reasons (Gboard verbatim field-unsupported toast) |
 
 ---
 

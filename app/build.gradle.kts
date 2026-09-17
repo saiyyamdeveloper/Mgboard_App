@@ -11,6 +11,13 @@ android {
     defaultConfig {
         applicationId = "com.mgboard.keyboard"
         minSdk = 24
+
+        // Klipy GIF API key — repo mein commit nahi hoti.
+        // local.properties ya environment se: KLIPY_APP_KEY=...
+        // (khali chhodo to GIF tab par setup hint dikhta hai; bundled stickers chalte rehte hain)
+        buildConfigField("String", "KLIPY_APP_KEY",
+            "\"" + (project.findProperty("KLIPY_APP_KEY")?.toString()
+                ?: System.getenv("KLIPY_APP_KEY") ?: "") + "\"")
         targetSdk = 35
         versionCode = 1
         versionName = "0.1.0"
@@ -30,7 +37,8 @@ android {
 
     kotlinOptions { jvmTarget = "17" }
 
-    buildFeatures { compose = true }
+    buildFeatures {
+        buildConfig = true compose = true }
 
     sourceSets {
         getByName("main") {
@@ -58,6 +66,18 @@ android {
 dependencies {
     implementation("androidx.core:core-ktx:1.13.1")
     implementation("androidx.core:core:1.13.1")   // ViewCompat/WindowCompat insets (padding-project)
+
+    // ── translate-project: ML Kit on-device translation (hi ↔ en) ────────────
+    // Research: docs/research/toolbar-project/TRANSLATE-GIF-FEASIBILITY.md §1.1
+    //  - 59 languages, `hi` + `en` officially supported; ~30 MB model per language
+    //  - poora on-device → koi permission nahi, koi API key nahi, text cloud par nahi jaata
+    //  - standalone SDK: Firebase/google-services.json ki zaroorat nahi
+    implementation("com.google.mlkit:translate:17.0.3")
+
+    // ── GIF/Stickers tabs: Compose mein animated GIF render karne ke liye ──────
+    // (coil-gif = MovieImageDecoder; WebP/PNG bhi inbuilt hain)
+    implementation("io.coil-kt:coil-compose:2.7.0")
+    implementation("io.coil-kt:coil-gif:2.7.0")
     implementation("androidx.activity:activity-compose:1.9.2")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.6")
 

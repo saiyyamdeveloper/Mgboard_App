@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.res.Configuration
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
+import com.mgboard.keyboard.BuildConfig
 import com.mgboard.keyboard.grid.GridMenu
 import com.mgboard.keyboard.prefs.SgPrefs
 import com.mgboard.keyboard.prefs.SgStore
@@ -121,6 +122,90 @@ class PrefsSettingsSource(
 
     override fun setToolbarVisible(v: Boolean) = prefs.setBool(SgPrefs.KEY_TOOLBAR, v)
 
+    // ── GIF / Stickers (Commit Content API + Klipy) ─────────────────────────
+    private val mediaCommit by lazy { com.mgboard.keyboard.media.MediaCommitController(context) }
+
+    override fun mediaEditorSupports(mime: String): Boolean =
+        mediaCommit.editorSupports(currentEditorInfo(), mime)
+
+    override fun commitBundledSticker(sticker: com.mgboard.keyboard.media.BundledSticker): Boolean =
+        mediaCommit.commitBundledSticker(sticker, currentEditorInfo(), currentInputConnection())
+
+    override fun commitRemoteMedia(item: com.mgboard.keyboard.media.MediaItem): Boolean =
+        mediaCommit.commitRemoteMedia(item, currentEditorInfo(), currentInputConnection())
+
+    /**
+     * Klipy key: runtime override (Settings) phir BuildConfig default.
+     * Repo mein key commit NAHI hoti — `local.properties`/gradle property se aati hai
+     * (`KLIPY_APP_KEY`), warna panel par setup hint dikhta hai (placeholder mode).
+     */
+    override fun klipyAppKey(): String =
+        toolbarSp.getString(KEY_KLIPY_KEY, null)?.takeIf { it.isNotBlank() }
+            ?: BuildConfig.KLIPY_APP_KEY
+
+    override fun klipyFetch(
+        url: String,
+        onResult: (com.mgboard.keyboard.media.MediaPage?) -> Unit,
+    ) {
+        Thread {
+            val page = try {
+                val conn = java.net.URL(url).openConnection() as java.net.HttpURLConnection
+                conn.connectTimeout = 8000
+                conn.readTimeout = 12000
+                conn.setRequestProperty("User-Agent", "MgBoard-Keyboard/1.0")
+                val body = conn.inputStream.bufferedReader(Charsets.UTF_8).use { it.readText() }
+                com.mgboard.keyboard.media.KlipyApi.parsePage(body)
+            } catch (e: Exception) {
+                null
+            }
+            android.os.Handler(android.os.Looper.getMainLooper()).post { onResult(page) }
+        }.start()
+    }
+
+    /** IME service current EditorInfo/InputConnection inject karta hai. */
+    var currentEditorInfo: () -> android.view.inputmethod.EditorInfo? = { null }
+    var currentInputConnection: () -> android.view.inputmethod.InputConnection? = { null }
+
+    // ── translate (ML Kit on-device, hi ↔ en) ───────────────────────────────
+    /**
+     * ML Kit engine. `by lazy` isliye taaki keyboard khulte hi ML Kit classes load
+     * na hon — sirf jab user translate panel khole.
+     */
+    private val mlKitEngine by lazy { MlKitTranslateEngine(wifiOnly = translateWifiOnly) }
+
+    override fun translateEngine(): com.mgboard.keyboard.translate.TranslateEngine = mlKitEngine
+
+    override val translateWifiOnly: Boolean
+        get() = toolbarSp.getBoolean(KEY_TRANSLATE_WIFI_ONLY, true)
+
+    override fun translateSrcCode(): String? =
+        toolbarSp.getString(KEY_TRANSLATE_SRC, null)?.takeIf { it.isNotBlank() }
+
+    override fun translateTgtCode(): String? =
+        toolbarSp.getString(KEY_TRANSLATE_TGT, null)?.takeIf { it.isNotBlank() }
+
+    override fun saveTranslateLanguages(src: String, tgt: String) {
+        toolbarSp.edit().putString(KEY_TRANSLATE_SRC, src).putString(KEY_TRANSLATE_TGT, tgt).apply()
+    }
+
+    override fun scheduleTimer(delayMs: Long, runnable: () -> Unit): Long {
+        val token = ++timerToken
+        timers[token] = runnable
+        timerHandler.postDelayed({
+            val r = timers.remove(token)
+            r?.invoke()
+        }, delayMs)
+        return token
+    }
+
+    override fun cancelTimer(token: Long) {
+        timers.remove(token)     // handler callback aane par runnable milega hi nahi
+    }
+
+    private val timerHandler = android.os.Handler(android.os.Looper.getMainLooper())
+    private val timers = HashMap<Long, () -> Unit>()
+    private var timerToken = 0L
+
     private fun readList(key: String): List<String> =
         toolbarSp.getString(key, "")?.split("|")?.filter { it.isNotEmpty() } ?: emptyList()
 
@@ -145,6 +230,12 @@ class PrefsSettingsSource(
         const val KEY_TRAILING_SPACE_DIVIDER = "enable_strip_trailing_space_divider"
         const val KEY_FORCE_HORIZONTAL_FOLDABLE = "force_enable_horizontal_toolbar_on_foldables"
         const val KEY_QUICK_INSERT = "enable_quick_insert"
+
+        const val KEY_KLIPY_KEY = "mg_klipy_app_key"
+
+        const val KEY_TRANSLATE_SRC = "translate_source_language"
+        const val KEY_TRANSLATE_TGT = "translate_target_language"
+        const val KEY_TRANSLATE_WIFI_ONLY = "translate_download_wifi_only"
 
         const val KEY_RECENT_SYMBOLS = "mg_recent_symbols"
         const val KEY_RECENT_EMOJI = "mg_recent_emoji"

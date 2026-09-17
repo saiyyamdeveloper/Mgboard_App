@@ -316,4 +316,38 @@
     <string name="tb_close_writing_tools">लेखन टूल बंद करें</string>
     <string name="tb_proofread_this_text">इस टेक्स्ट का प्रूफ़रीड करें</string>
     <string name="tb_search_emoji">इमोजी खोजें</string>
+
+    <!-- ═══ translate panel (ML Kit on-device, hi ↔ en) ═══ -->
+    <string name="tr_detect_language">भाषा पहचानें</string>
+    <string name="tr_swap_languages">भाषाएं बदलें</string>
+    <string name="tr_insert_translation">अनुवाद डालें</string>
+    <string name="tr_type_to_translate">अनुवाद करने के लिए नीचे कीबोर्ड से टाइप करें</string>
+    <string name="tr_translating">अनुवाद हो रहा है…</string>
+    <string name="tr_downloading_model">अनुवाद मॉडल डाउनलोड हो रहा है…</string>
+    <string name="tr_download_model">मॉडल डाउनलोड करें (~30 MB, एक बार)</string>
+    <string name="tr_wifi_only">केवल वाई-फ़ाई पर</string>
+    <string name="tr_any_network">कोई भी नेटवर्क</string>
+    <string name="tr_on_device">डिवाइस पर · टेक्स्ट बाहर नहीं जाता</string>
+    <string name="tr_via_english">English के ज़रिए अनुवादित</string>
+    <string name="tr_try_again">फिर कोशिश करें</string>
+    <string name="tr_no_engine">इस डिवाइस पर अनुवाद उपलब्ध नहीं है.</string>
+    <string name="tr_download_failed">अनुवाद मॉडल डाउनलोड नहीं हो सका. अपना कनेक्शन जांचें और फिर कोशिश करें.</string>
+    <string name="tr_tool_unavailable">अभी इस टूल का उपयोग नहीं किया जा सकता. कृपया बाद में फिर कोशिश करें.</string>
+    <string name="tr_romanized_unsupported">रोमन हिन्दी अभी supported नहीं है — बेहतर नतीजे के लिए कीबोर्ड को हिन्दी पर बदलें.</string>
+    <string name="tr_model_size_summary">हर भाषा का मॉडल लगभग 30 MB का होता है और एक बार डाउनलोड होता है. उसके बाद अनुवाद ऑफ़लाइन चलता है.</string>
+    <string name="tr_open_panel">अनुवाद पैनल खोलें</string>
+    <string name="tr_close_panel">अनुवाद पैनल बंद करें</string>
+
+    <!-- ═══ GIF / Stickers (expression panel, Commit Content API) ═══ -->
+    <string name="md_search_stickers">स्टिकर खोजें</string>
+    <string name="md_search_gifs">GIF खोजें (Enter दबाएं)</string>
+    <string name="md_no_stickers">कोई स्टिकर नहीं मिला</string>
+    <string name="md_no_gifs">कोई GIF नहीं मिला</string>
+    <string name="md_field_unsupported">यह टेक्स्ट फ़ील्ड कीबोर्ड से GIF डालने का समर्थन नहीं करती</string>
+    <string name="md_klipy_hint">GIF खोज के लिए Klipy API key जोड़ें (Settings → Klipy API key). Bundled stickers नीचे चलते रहेंगे.</string>
+    <string name="md_klipy_where">partner.klipy.com → API Keys से मुफ़्त key लें, फिर Settings → Klipy API key में paste करें.</string>
+    <string name="md_attribution_klipy">GIFs · KLIPY</string>
+    <string name="md_try_again">फिर कोशिश करें</string>
+    <string name="md_open_gif_tab">GIF टैब खोलें</string>
+    <string name="md_open_stickers_tab">स्टिकर टैब खोलें</string>
 </resources>

@@ -62,7 +62,11 @@ fun EmojiPanel(model: KeyboardModel) {
     var query by remember { mutableStateOf("") }
     var category by remember { mutableStateOf(EmojiData.CATEGORIES.keys.first()) }
 
-    val gated = SymbolPanelData.tabGateReason(tab, hindi)
+    val gated = SymbolPanelData.tabGateReason(
+        tab, hindi,
+        editorSupportsImage = model.settings.mediaEditorSupports("image/gif") ||
+            model.settings.mediaEditorSupports("image/png"),
+    )
 
     Column(Modifier.fillMaxWidth().height(230.dp)) {
         // ── tabs ────────────────────────────────────────────────────────────
@@ -99,6 +103,10 @@ fun EmojiPanel(model: KeyboardModel) {
             }
             return@Column
         }
+
+        // ── GIF / Stickers tabs apne panels kholte hain (search+grid alag hai) ──
+        if (tab == "Stickers") { StickersPanel(model); return@Column }
+        if (tab == "GIF") { GifPanel(model); return@Column }
 
         // ── search box (.expression-search-box) ───────────────────────────────
         TextField(

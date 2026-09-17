@@ -42,6 +42,8 @@ object AllTests {
         LayoutTests.run()
         VoiceTests.run()
         ToolbarTests.run()
+        TranslateTests.run()
+        MediaTests.run()
         System.exit(T.report())
     }
 

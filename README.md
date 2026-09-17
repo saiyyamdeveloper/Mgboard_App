@@ -45,12 +45,21 @@ Developed by **[Saiyyam Ji (@saiyyamdeveloper)](https://github.com/saiyyamdevelo
   3–8), semicolon order storage, and overflow into the **features menu**. Includes
   undo/redo chips that appear *"when user edits existing text"* (Gboard's own rule) and
   a one-time "Access all keyboard features here" education footer.
+- **Translate panel (on-device)**: Gboard-style **source ⇄ target** pickers with
+  auto-detect, powered by **ML Kit Translate** — `hi` ↔ `en` officially supported,
+  ~30 MB model downloaded once (Wi-Fi by default), then fully offline with zero
+  permissions and zero cloud calls ("On-device · text never leaves this device").
+  Romanized Hinglish is honestly gated with a clear reason.
 - **Panels from the toolbar**: emoji/expression panel (5 tabs — Emoji · GIF · Stickers ·
-  Favorites · Recents — with search and 9 categories of emoji), symbols panel with
-  Gboard's exact **8 categories** (`Numbers · Brackets · Arrows · Mathematics · List ·
-  Shapes · Emoticons · Recent`, Numbers showing native Gondi digits), clipboard panel
-  with history, and an edit menu (select all / copy / cut / paste) driven by
-  `InputConnection`.
+  Favorites · Recents — with search and 9 categories of emoji), a **bundled MgBoard
+  sticker pack** (12 original stickers drawn with the bundled Gondi font — offline,
+  no API key), **GIF search via Klipy** (free-for-life Tenor successor; plug in a key
+  and the tab goes live), symbols panel with Gboard's exact **8 categories**
+  (`Numbers · Brackets · Arrows · Mathematics · List · Shapes · Emoticons · Recent`,
+  Numbers showing native Gondi digits), clipboard panel with history, and an edit menu
+  (select all / copy / cut / paste) driven by `InputConnection`. GIF/sticker insertion
+  uses Android's **Commit Content API**, with Gboard's verbatim message when a text
+  field doesn't opt in.
 - **⊞ Grid menu — "More features"**: 21 tiles (20 grid + fixed mic), 6 per page,
   drag-to-customize, semicolon order storage
 - **Honest gating (hide-nothing)**: features that need a backend or permission still
@@ -116,7 +125,7 @@ Or open the repo in Android Studio and press Run.
 ## 🧪 Tests
 
 ```bash
-./scripts/run_jvm_tests.sh      # engine, converter, layouts, shift, grid menu, voice, toolbar — 679 assertions
+./scripts/run_jvm_tests.sh      # engine, converter, layouts, shift, grid menu, voice, toolbar, translate, media — 904 assertions
 python3 scripts/check_parity.py # generated settings model vs web — 1055/1055
 ```
 
@@ -213,5 +222,7 @@ Parity details, including a web quirk that is deliberately **locked** rather tha
 - [ ] Voice **commands** ("delete line", "go to settings", rephrase) — menu item currently gated honestly
 - [ ] Word/next-word **suggestions** in the strip (needs a prediction model — currently
       no chips, honestly gated)
-- [ ] GIF/Stickers content, Translate/Writing Tools/Proofread backends (menu items and
-      panels exist, gated with Gboard's verbatim reasons)
+- [ ] Writing Tools / Proofread backends (panels exist, gated with Gboard's verbatim
+      reasons) — ML Kit GenAI proofreading is a candidate for Pixel-class devices
+- [ ] Klipy production API key approval (testing key works at 100 req/hour) and written
+      confirmation of the transient delivery-buffer architecture
