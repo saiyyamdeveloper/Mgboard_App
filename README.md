@@ -1,5 +1,7 @@
 # Mgboard — Masaram Gondi Keyboard for Android
 
+[![JVM tests](https://github.com/saiyyamdeveloper/Mgboard_App/actions/workflows/jvm-tests.yml/badge.svg)](https://github.com/saiyyamdeveloper/Mgboard_App/actions/workflows/jvm-tests.yml)
+
 **|| जय सेवा ||**
 
 🌿 **Mgboard** is a privacy-first, offline Android keyboard (IME) for the **Masaram Gondi
@@ -126,6 +128,7 @@ Or open the repo in Android Studio and press Run.
 
 ```bash
 ./scripts/run_jvm_tests.sh      # engine, converter, layouts, shift, grid menu, voice, toolbar, translate, media — 930 assertions
+                                  # (GitHub Actions par bhi yahi suite har push par chalta hai — badge upar)
 python3 scripts/check_parity.py # generated settings model vs web — 1055/1055
 ```
 

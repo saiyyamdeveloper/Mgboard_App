@@ -1,0 +1,32 @@
+# Public proof: har push/PR par poora JVM regression suite (930 assertions) chalta hai.
+# Android SDK ki zaroorat nahi — pure-Kotlin core kotlinc + JDK par compile hota hai
+# (same rule as ./scripts/run_jvm_tests.sh: android/androidx import wale files skip).
+name: JVM tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  regression-suite:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Install Kotlin compiler 2.4.20
+        run: |
+          curl -sL -o /tmp/kotlin-compiler.zip \
+            https://github.com/JetBrains/kotlin/releases/download/v2.4.20/kotlin-compiler-2.4.20.zip
+          unzip -q /tmp/kotlin-compiler.zip -d /opt
+          echo "KOTLINC=/opt/kotlinc/bin/kotlinc" >> "$GITHUB_ENV"
+
+      - name: Run JVM regression suite (engine + converter + toolbar + translate + media)
+        run: ./scripts/run_jvm_tests.sh
