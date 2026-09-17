@@ -141,7 +141,34 @@ class KlipyApi(
         return parsePage(body)
     }
 
-    enum class Kind(val path: String) { GIFS("gifs"), STICKERS("stickers") }
+    /**
+     * Klipy ke **saare content types** (docs.klipy.com): GIFs, Clips (video),
+     * Stickers, Memes — user ke order par sab expression panel mein tabs hain.
+     * (AI Emoji generation POST-based async job hai — abhi scope se bahar.)
+     */
+    enum class Kind(val path: String, val fullMime: String, val previewFormats: List<String>, val fullFormats: List<String>) {
+        GIFS("gifs", "image/gif", listOf("webp", "gif"), listOf("gif", "webp")),
+        CLIPS("clips", "video/mp4", listOf("gif", "webp"), listOf("mp4", "webm")),
+        STICKERS("stickers", "image/webp", listOf("webp", "gif"), listOf("webp", "gif", "png")),
+        MEMES("memes", "image/jpeg", listOf("webp", "jpg"), listOf("jpg", "webp", "png")),
+        ;
+
+        /** Klipy ke terms ka mandatory attribution label. */
+        fun attribution(): String = when (this) {
+            GIFS -> "GIFs · KLIPY"
+            CLIPS -> "Clips · KLIPY"
+            STICKERS -> "Stickers · KLIPY"
+            MEMES -> "Memes · KLIPY"
+        }
+
+        /** File extension jo commit ke waqt delivery buffer mein likhti hai. */
+        val ext: String get() = when (this) {
+            GIFS -> "gif"
+            CLIPS -> "mp4"
+            STICKERS -> "webp"
+            MEMES -> "jpg"
+        }
+    }
 
     companion object {
         const val BASE = "https://api.klipy.com"
@@ -156,7 +183,7 @@ class KlipyApi(
          * Response parse — [MiniJson] se. `sm.webp` preview (chhota, animated),
          * `md.gif` full (editor ko yahi jaata hai).
          */
-        fun parsePage(json: String): MediaPage? {
+        fun parsePage(json: String, kind: Kind = Kind.GIFS): MediaPage? {
             val root = MiniJson.parse(json) as? Map<*, *> ?: return null
             if (root["result"] != true) return null
             val data = root["data"] as? Map<*, *> ?: return null
@@ -169,14 +196,14 @@ class KlipyApi(
                 val file = obj["file"] as? Map<*, *> ?: continue
                 val sm = file["sm"] as? Map<*, *>
                 val md = file["md"] as? Map<*, *>
-                val preview = (sm?.get("webp") as? Map<*, *>) ?: (sm?.get("gif") as? Map<*, *>)
-                val full = (md?.get("gif") as? Map<*, *>) ?: (md?.get("webp") as? Map<*, *>)
+                val fullFmt = kind.fullFormats.firstOrNull { md?.get(it) is Map<*, *> }
+                val previewFmt = kind.previewFormats.firstOrNull { sm?.get(it) is Map<*, *> }
+                val preview = previewFmt?.let { sm?.get(it) as? Map<*, *> }
+                val full = fullFmt?.let { md?.get(it) as? Map<*, *> }
                 val previewUrl = preview?.get("url") as? String ?: continue
                 val fullUrl = full?.get("url") as? String ?: previewUrl
-                val mime = when {
-                    full === md?.get("gif") -> "image/gif"
-                    else -> "image/webp"
-                }
+                // MIME = jo format actually mila (fallback par kind ka default)
+                val mime = mimeForFormat(fullFmt) ?: kind.fullMime
                 items += MediaItem(
                     slug = slug,
                     title = title,
@@ -192,6 +219,17 @@ class KlipyApi(
                 page = (data["current_page"] as? Number)?.toInt() ?: 1,
                 hasNext = data["has_next"] == true,
             )
+        }
+
+        /** Klipy format name → MIME type. */
+        fun mimeForFormat(fmt: String?): String? = when (fmt) {
+            "gif" -> "image/gif"
+            "webp" -> "image/webp"
+            "png" -> "image/png"
+            "jpg" -> "image/jpeg"
+            "mp4" -> "video/mp4"
+            "webm" -> "video/webm"
+            else -> null
         }
 
         /** Minimal URL-encode (query string ke liye kaafi). */

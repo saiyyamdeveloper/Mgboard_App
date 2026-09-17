@@ -53,8 +53,8 @@ Developed by **[Saiyyam Ji (@saiyyamdeveloper)](https://github.com/saiyyamdevelo
 - **Panels from the toolbar**: emoji/expression panel (5 tabs — Emoji · GIF · Stickers ·
   Favorites · Recents — with search and 9 categories of emoji), a **bundled MgBoard
   sticker pack** (12 original stickers drawn with the bundled Gondi font — offline,
-  no API key), **GIF search via Klipy** (free-for-life Tenor successor; plug in a key
-  and the tab goes live), symbols panel with Gboard's exact **8 categories**
+  no API key), and **Klipy-powered GIFs · Clips · Stickers · Memes tabs** (free-for-life
+  Tenor successor; paste the API key in-app and all tabs go live), symbols panel with Gboard's exact **8 categories**
   (`Numbers · Brackets · Arrows · Mathematics · List · Shapes · Emoticons · Recent`,
   Numbers showing native Gondi digits), clipboard panel with history, and an edit menu
   (select all / copy / cut / paste) driven by `InputConnection`. GIF/sticker insertion
@@ -125,7 +125,7 @@ Or open the repo in Android Studio and press Run.
 ## 🧪 Tests
 
 ```bash
-./scripts/run_jvm_tests.sh      # engine, converter, layouts, shift, grid menu, voice, toolbar, translate, media — 904 assertions
+./scripts/run_jvm_tests.sh      # engine, converter, layouts, shift, grid menu, voice, toolbar, translate, media — 930 assertions
 python3 scripts/check_parity.py # generated settings model vs web — 1055/1055
 ```
 

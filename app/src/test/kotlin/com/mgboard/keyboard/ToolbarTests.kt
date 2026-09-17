@@ -364,8 +364,14 @@ object ToolbarTests {
     private fun expressionTabs() {
         T.section("Expression panel — tabs + gating (§5.1)")
 
-        T.eq("5 tabs (APK se)", SymbolPanelData.EXPRESSION_TABS,
-            listOf("Emoji", "GIF", "Stickers", "Favorites", "Recents"))
+        // Gboard ke APK wale 5 tabs + Klipy ke content types (user order: sab categories)
+        T.eq("7 tabs (Gboard 5 + Klipy Clips/Memes)", SymbolPanelData.EXPRESSION_TABS,
+            listOf("Emoji", "GIF", "Clips", "Stickers", "Memes", "Favorites", "Recents"))
+        T.eq("tab MIME: GIF", SymbolPanelData.tabMime("GIF"), "image/gif")
+        T.eq("tab MIME: Clips = video", SymbolPanelData.tabMime("Clips"), "video/mp4")
+        T.eq("tab MIME: Stickers", SymbolPanelData.tabMime("Stickers"), "image/png")
+        T.eq("tab MIME: Memes", SymbolPanelData.tabMime("Memes"), "image/jpeg")
+        T.eq("tab MIME: Emoji = null (koi commit nahi)", SymbolPanelData.tabMime("Emoji"), null)
         T.eq("Emoji tab chalta hai (gate nahi)", SymbolPanelData.tabGateReason("Emoji", false), null)
         T.eq("Favorites tab chalta hai", SymbolPanelData.tabGateReason("Favorites", true), null)
         T.eq("Recents tab chalta hai", SymbolPanelData.tabGateReason("Recents", false), null)
@@ -384,6 +390,17 @@ object ToolbarTests {
             SymbolPanelData.tabGateReason("GIF", false, editorSupportsImage = true), null)
         T.eq("editor support ho to Stickers tab khulta hai (bundled pack offline ready)",
             SymbolPanelData.tabGateReason("Stickers", true, editorSupportsImage = true), null)
+        // Clips = video: image support kaafi nahi, video/* chahiye
+        T.eq("Clips gated jab video support nahi",
+            SymbolPanelData.tabGateReason("Clips", false, editorSupportsImage = true),
+            "The text field does not support GIF insertion from the keyboard".replace("GIF", "video/mp4").let {
+                com.mgboard.keyboard.media.MediaAvailability.EditorUnsupported("video/mp4").reason(false) })
+        T.eq("Clips khulta hai jab video support hai",
+            SymbolPanelData.tabGateReason("Clips", false, editorSupportsVideo = true), null)
+        T.eq("Memes khulta hai jab image support hai",
+            SymbolPanelData.tabGateReason("Memes", true, editorSupportsImage = true), null)
+        T.eq("Memes gated jab image support nahi",
+            SymbolPanelData.tabGateReason("Memes", false, false) != null, true)
 
         // emoji data KeyboardData mein already hai (web se generated)
         T.eq("emoji categories = 9", com.mgboard.keyboard.data.EmojiData.CATEGORIES.size, 9)

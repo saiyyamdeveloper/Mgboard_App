@@ -86,7 +86,15 @@ class MediaCommitController(private val context: Context) {
     fun commitRemoteMedia(item: MediaItem, info: EditorInfo?, ic: InputConnection?): Boolean {
         if (info == null || ic == null) return false
         if (!editorSupports(info, item.mime)) return false
-        val ext = if (item.mime == "image/gif") "gif" else "webp"
+        val ext = when (item.mime) {
+            "image/gif" -> "gif"
+            "image/webp" -> "webp"
+            "image/png" -> "png"
+            "image/jpeg" -> "jpg"
+            "video/mp4" -> "mp4"
+            "video/webm" -> "webm"
+            else -> "bin"
+        }
         val file = mediaFile("${sanitize(item.slug)}.$ext")
         if (!downloadTo(item.fullUrl, file)) return false
         return commitFile(file, item.mime, item.title, info, ic)

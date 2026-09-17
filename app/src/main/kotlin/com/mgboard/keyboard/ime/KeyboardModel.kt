@@ -111,8 +111,18 @@ class KeyboardModel(
         /** Klipy API key (BuildConfig/prefs se). Khali = GIF search gated (setup hint). */
         fun klipyAppKey(): String = ""
 
-        /** Klipy search/trending fetch — background thread par, result callback. */
-        fun klipyFetch(url: String, onResult: (com.mgboard.keyboard.media.MediaPage?) -> Unit) {}
+        /**
+         * Klipy search/trending fetch — background thread par, result callback.
+         * `kind` response parse ke liye chahiye (har type ke formats alag hain).
+         */
+        fun klipyFetch(
+            url: String,
+            kind: com.mgboard.keyboard.media.KlipyApi.Kind,
+            onResult: (com.mgboard.keyboard.media.MediaPage?) -> Unit,
+        ) {}
+
+        /** Runtime API key (app ke andar 🔑 field se) — prefs mein save hoti hai. */
+        fun setKlipyAppKey(key: String) {}
 
         fun setPinnedIds(ids: List<String>)
         /** off → right → left → off (web: cycleOneHanded). Naya mode return karta hai. */

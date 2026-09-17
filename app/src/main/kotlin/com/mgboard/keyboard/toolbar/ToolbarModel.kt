@@ -438,8 +438,21 @@ object SymbolPanelData {
         ":-B", ":3", "^_^", "T_T", "-_-", "o_O", "<3", "</3",
     )
 
-    /** Emoji panel ke tabs (§5.1): Emoji · GIF · Stickers · Favorites · Recents. */
-    val EXPRESSION_TABS = listOf("Emoji", "GIF", "Stickers", "Favorites", "Recents")
+    /**
+     * Emoji panel ke tabs. Gboard ke APK wale 5 (`Emoji · GIF · Stickers · Favorites ·
+     * Recents`, §5.1) + **Klipy ke saare content types** user ke order par:
+     * `Clips` (video) aur `Memes`. (AI Emoji generation POST-job hai — scope se bahar.)
+     */
+    val EXPRESSION_TABS = listOf("Emoji", "GIF", "Clips", "Stickers", "Memes", "Favorites", "Recents")
+
+    /** Tab ka commit MIME — editor support check isi se hota hai. */
+    fun tabMime(tab: String): String? = when (tab) {
+        "GIF" -> "image/gif"
+        "Clips" -> "video/mp4"
+        "Stickers" -> "image/png"
+        "Memes" -> "image/jpeg"
+        else -> null
+    }
 
     /**
      * Tab kab gated dikhe (hide-nothing: tab chhupta nahi, wajah batata hai).
@@ -460,13 +473,11 @@ object SymbolPanelData {
         tab: String,
         hindi: Boolean,
         editorSupportsImage: Boolean = false,
-    ): String? = when (tab) {
-        "GIF" -> if (!editorSupportsImage)
-            com.mgboard.keyboard.media.MediaAvailability.EditorUnsupported("image/gif").reason(hindi)
-        else null
-        "Stickers" -> if (!editorSupportsImage)
-            com.mgboard.keyboard.media.MediaAvailability.EditorUnsupported("image/png").reason(hindi)
-        else null
-        else -> null
+        editorSupportsVideo: Boolean = false,
+    ): String? {
+        val mime = tabMime(tab) ?: return null
+        val supported = if (mime.startsWith("video/")) editorSupportsVideo else editorSupportsImage
+        return if (supported) null
+        else com.mgboard.keyboard.media.MediaAvailability.EditorUnsupported(mime).reason(hindi)
     }
 }

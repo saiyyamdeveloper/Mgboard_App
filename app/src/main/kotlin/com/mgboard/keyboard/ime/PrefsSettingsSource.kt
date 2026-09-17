@@ -143,8 +143,13 @@ class PrefsSettingsSource(
         toolbarSp.getString(KEY_KLIPY_KEY, null)?.takeIf { it.isNotBlank() }
             ?: BuildConfig.KLIPY_APP_KEY
 
+    override fun setKlipyAppKey(key: String) {
+        toolbarSp.edit().putString(KEY_KLIPY_KEY, key.trim()).apply()
+    }
+
     override fun klipyFetch(
         url: String,
+        kind: com.mgboard.keyboard.media.KlipyApi.Kind,
         onResult: (com.mgboard.keyboard.media.MediaPage?) -> Unit,
     ) {
         Thread {
@@ -154,7 +159,7 @@ class PrefsSettingsSource(
                 conn.readTimeout = 12000
                 conn.setRequestProperty("User-Agent", "MgBoard-Keyboard/1.0")
                 val body = conn.inputStream.bufferedReader(Charsets.UTF_8).use { it.readText() }
-                com.mgboard.keyboard.media.KlipyApi.parsePage(body)
+                com.mgboard.keyboard.media.KlipyApi.parsePage(body, kind)
             } catch (e: Exception) {
                 null
             }

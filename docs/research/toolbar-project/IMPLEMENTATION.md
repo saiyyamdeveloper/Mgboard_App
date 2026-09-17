@@ -200,9 +200,13 @@ phir user-confirmed decisions par implement hua:
 - `media/MediaCommitController.kt`: **Commit Content API** pipeline — editor MIME opt-in
   check, FileProvider (`${applicationId}.mediaprovider`, `res/xml/media_paths.xml`),
   transient delivery buffer (`cacheDir/media/`, prune 12), `INPUT_CONTENT_GRANT_READ_URI_PERMISSION`
-- `ui/MediaPanels.kt`: Stickers grid (Coil, raw res) + GIF tab (Klipy trending/search,
-  explicit submit — testing key 100 req/hr; animated GIF decode `coil-gif`;
-  "GIFs · KLIPY" attribution; key khali ho to setup hint)
+- `ui/MediaPanels.kt`: Stickers grid (Coil, raw res + KLIPY stickers section when key
+  set) + **GIF / Clips / Memes tabs** — Klipy ke saare content types (user order),
+  explicit submit (testing key 100 req/hr), animated GIF decode `coil-gif`,
+  per-kind attribution ("GIFs · KLIPY", "Clips · KLIPY", …), key khali ho to setup hint
+- **API key ke 4 raaste** (priority): `local.properties` → `KLIPY_APP_KEY=...`,
+  gradle property / `-P`, env var, ya **app ke andar 🔑 "Klipy API key" dialog**
+  (runtime prefs — rebuild ki zaroorat nahi). Key repo mein commit nahi hoti.
 - Gating matrix: editor support nahi → Gboard verbatim
   *"The text field does not support GIF insertion from the keyboard"*; key nahi → setup
   hint; offline → Gboard verbatim unavailable message. Bundled pack hamesha ready.

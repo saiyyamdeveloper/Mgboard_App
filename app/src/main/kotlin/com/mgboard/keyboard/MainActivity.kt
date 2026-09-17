@@ -18,6 +18,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -140,6 +143,7 @@ private fun LivePreview(theme: String, onThemeChange: (String) -> Unit) {
     // har control change par tick++ → poora preview recompose (settings values
     // plain fields hain, isliye Compose ko explicit signal chahiye)
     var tick by remember { mutableStateOf(0) }
+    var showKeyDialog by remember { mutableStateOf(false) }
     fun refresh() { tick++; model.bump(); out = input.text; status = describe(model) }
     fun refreshTick() { tick++; out = input.text }
 
@@ -234,6 +238,9 @@ private fun LivePreview(theme: String, onThemeChange: (String) -> Unit) {
             OutlinedButton(onClick = {
                 model.openTranslatePanel(); refreshTick()
             }) { Text("🗣 " + (settings.uiHindi.let { if (it) "अनुवाद" else "Translate" })) }
+            OutlinedButton(onClick = { showKeyDialog = true; refreshTick() }) {
+                Text(if (settings.klipyAppKey().isBlank()) "🔑 Klipy key: —" else "🔑 Klipy key: ✓")
+            }
             OutlinedButton(onClick = {
                 settings.previewEditorSupportsMedia = !settings.previewEditorSupportsMedia
                 model.openToolbarPanel(com.mgboard.keyboard.toolbar.ToolbarPanel.EMOJI)
@@ -243,6 +250,15 @@ private fun LivePreview(theme: String, onThemeChange: (String) -> Unit) {
                 settings.addClipboardEntry("नमस्ते MgBoard"); settings.addClipboardEntry("𑴌𑴳𑴛")
                 model.openToolbarPanel(com.mgboard.keyboard.toolbar.ToolbarPanel.CLIPBOARD); refreshTick()
             }) { Text("📋 Clipboard") }
+        }
+
+        // ── Klipy API key dialog (runtime key — rebuild ki zaroorat nahi) ──────
+        if (showKeyDialog) {
+            KlipyKeyDialog(
+                initial = settings.klipyAppKey(),
+                onSave = { key -> settings.setKlipyAppKey(key); refresh() },
+                onDismiss = { showKeyDialog = false; refreshTick() },
+            )
         }
 
         // ── voice toolbar (Gboard-style pill) ke controls ────────────────────────
@@ -343,4 +359,46 @@ private fun isMgBoardEnabled(ctx: Context): Boolean {
 private fun showImePicker(ctx: Context) {
     val imm = ctx.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
     runCatching { imm.showInputMethodPicker() }
+}
+
+/**
+ * 🔑 Klipy API key dialog — key **runtime** par save hoti hai (prefs), isliye GIF/Clips/
+ * Stickers/Memes tabs bina rebuild live ho jaate hain. Build-time alternatives bhi hain:
+ * `local.properties` mein `KLIPY_APP_KEY=...` ya env var (build.gradle.kts padhta hai).
+ */
+@Composable
+private fun KlipyKeyDialog(
+    initial: String,
+    onSave: (String) -> Unit,
+    onDismiss: () -> Unit,
+) {
+    var key by remember { mutableStateOf(initial) }
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text("Klipy API key", fontSize = 16.sp, fontWeight = FontWeight.SemiBold) },
+        text = {
+            Column {
+                Text(
+                    "partner.klipy.com → API Keys se free key banayein, phir yahan paste karein. " +
+                        "Key sirf is device par save hoti hai — repo mein commit nahi hoti. " +
+                        "(Build-time alternative: local.properties mein KLIPY_APP_KEY= likhein.)",
+                    fontSize = 11.sp,
+                )
+                Spacer(Modifier.height(8.dp))
+                OutlinedTextField(
+                    value = key,
+                    onValueChange = { key = it },
+                    singleLine = true,
+                    label = { Text("KLIPY_APP_KEY", fontSize = 12.sp) },
+                    modifier = Modifier.fillMaxWidth(),
+                )
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = { onSave(key) }) { Text("Save") }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) { Text("Cancel") }
+        },
+    )
 }

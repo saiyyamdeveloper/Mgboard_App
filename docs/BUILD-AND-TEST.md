@@ -8,7 +8,7 @@ hain) aur **Gradle build** (Android Studio / local machine par).
 ## 1. Pure-logic JVM tests — `./scripts/run_jvm_tests.sh`
 
 Engine, converter, layouts, grid-menu, QWERTY shift, timings aur **poori voice-toolbar
-state machine** — sab plain JVM par compile + run hote hain. **904 assertions.**
+state machine** — sab plain JVM par compile + run hote hain. **930 assertions.**
 
 ```bash
 ./scripts/run_jvm_tests.sh          # kotlinc + java chahiye

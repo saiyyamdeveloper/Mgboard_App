@@ -1,8 +1,28 @@
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.plugin.compose")
 }
+
+/**
+ * Klipy API key kahin se bhi aa sakti hai (priority order):
+ *   1. `local.properties`  → KLIPY_APP_KEY=...   (sabse aasaan; repo mein commit NAHI hoti)
+ *   2. gradle property      → gradle.properties ya -PKLIPY_APP_KEY=...
+ *   3. environment variable → KLIPY_APP_KEY=...
+ *   4. runtime              → app ke andar 🔑 "Klipy API key" field (prefs mein save)
+ */
+fun klipyKeyFromLocalProperties(): String {
+    val props = Properties()
+    val f = rootProject.file("local.properties")
+    if (f.exists()) f.inputStream().use { props.load(it) }
+    return props.getProperty("KLIPY_APP_KEY")
+        ?: project.findProperty("KLIPY_APP_KEY")?.toString()
+        ?: System.getenv("KLIPY_APP_KEY")
+        ?: ""
+}
+
 
 android {
     namespace = "com.mgboard.keyboard"
@@ -16,8 +36,7 @@ android {
         // local.properties ya environment se: KLIPY_APP_KEY=...
         // (khali chhodo to GIF tab par setup hint dikhta hai; bundled stickers chalte rehte hain)
         buildConfigField("String", "KLIPY_APP_KEY",
-            "\"" + (project.findProperty("KLIPY_APP_KEY")?.toString()
-                ?: System.getenv("KLIPY_APP_KEY") ?: "") + "\"")
+            "\"" + klipyKeyFromLocalProperties() + "\"")
         targetSdk = 35
         versionCode = 1
         versionName = "0.1.0"

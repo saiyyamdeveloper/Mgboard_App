@@ -167,6 +167,29 @@ object MediaTests {
         T.eq("docs constants: per_page max", KlipyApi.MAX_PER_PAGE, 50)
         T.eq("docs constants: default", KlipyApi.DEFAULT_PER_PAGE, 24)
         T.eq("testing-mode rate limit = 100/hr", KlipyApi.TESTING_RATE_LIMIT_PER_HOUR, 100)
+
+        // ── saare Klipy content types (user order: GIFs/Clips/Stickers/Memes) ──
+        T.eq("4 content kinds", KlipyApi.Kind.values().map { it.path },
+            listOf("gifs", "clips", "stickers", "memes"))
+        T.ok("clips trending URL", api.trendingUrl(KlipyApi.Kind.CLIPS, 1, 24, "IN", "")
+            .contains("/api/v1/TESTKEY/clips/trending?"))
+        run {
+            val mu = api.searchUrl(KlipyApi.Kind.MEMES, "funny", 2, 24, "", "")
+            T.ok("memes search path", mu.contains("/api/v1/TESTKEY/memes/search?"))
+            T.ok("memes query param", mu.contains("q=funny"))
+            T.ok("memes page 2", mu.contains("page=2"))
+        }
+        T.ok("stickers trending URL", api.trendingUrl(KlipyApi.Kind.STICKERS, 1, 24, "", "")
+            .contains("/api/v1/TESTKEY/stickers/trending?"))
+        T.eq("kind MIMEs", KlipyApi.Kind.values().map { it.fullMime },
+            listOf("image/gif", "video/mp4", "image/webp", "image/jpeg"))
+        T.eq("kind exts", KlipyApi.Kind.values().map { it.ext },
+            listOf("gif", "mp4", "webp", "jpg"))
+        T.eq("attributions (terms mandatory)", KlipyApi.Kind.values().map { it.attribution() },
+            listOf("GIFs · KLIPY", "Clips · KLIPY", "Stickers · KLIPY", "Memes · KLIPY"))
+        T.eq("mimeForFormat map",
+            listOf("gif", "webp", "png", "jpg", "mp4", "webm", "xyz").map { KlipyApi.mimeForFormat(it) },
+            listOf("image/gif", "image/webp", "image/png", "image/jpeg", "video/mp4", "video/webm", null))
     }
 
     // ══════════════ 4. Klipy response parsing ══════════════
@@ -191,6 +214,38 @@ object MediaTests {
         T.eq("fallback: full = md.webp", b.fullUrl, "https://static.klipy.com/b/md.webp")
         T.eq("fallback: mime = image/webp", b.mime, "image/webp")
         T.eq("Devanagari title parse hua", b.title.contains("\u0928\u092E\u0938\u094D\u0924\u0947"), true)
+
+        // ── clips parse: md.mp4 chunta hai (video) ──────────────────────────
+        run {
+            val clipJson = """
+            {"result":true,"data":{"data":[{
+              "slug":"clip-1","title":"Celebration",
+              "file":{
+                "sm":{"gif":{"url":"https://s.k/1/sm.gif"}},
+                "md":{"mp4":{"url":"https://s.k/1/md.mp4","width":320,"height":320},"webm":{"url":"https://s.k/1/md.webm"}}
+              },"tags":[],"type":"clip"}],"current_page":2,"has_next":false}}
+            """.trimIndent()
+            val cp = KlipyApi.parsePage(clipJson, KlipyApi.Kind.CLIPS)!!
+            T.eq("clip full = md.mp4", cp.items[0].fullUrl, "https://s.k/1/md.mp4")
+            T.eq("clip mime = video/mp4", cp.items[0].mime, "video/mp4")
+            T.eq("clip preview = sm.gif", cp.items[0].previewUrl, "https://s.k/1/sm.gif")
+            T.eq("clip page = 2", cp.page, 2)
+            T.ok("clip hasNext false", !cp.hasNext)
+        }
+        // ── memes parse: md.jpg chunta hai ──────────────────────────────────
+        run {
+            val memeJson = """
+            {"result":true,"data":{"data":[{
+              "slug":"meme-1","title":"Gondi dev",
+              "file":{
+                "sm":{"webp":{"url":"https://s.k/m/sm.webp"}},
+                "md":{"jpg":{"url":"https://s.k/m/md.jpg","width":500,"height":500}}
+              },"tags":[],"type":"meme"}],"current_page":1,"has_next":true}}
+            """.trimIndent()
+            val mp = KlipyApi.parsePage(memeJson, KlipyApi.Kind.MEMES)!!
+            T.eq("meme full = md.jpg", mp.items[0].fullUrl, "https://s.k/m/md.jpg")
+            T.eq("meme mime = image/jpeg", mp.items[0].mime, "image/jpeg")
+        }
 
         // failure shapes
         T.eq("result=false → null", KlipyApi.parsePage("""{"result":false}"""), null)

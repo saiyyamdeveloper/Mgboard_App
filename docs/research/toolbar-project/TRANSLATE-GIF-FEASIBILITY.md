@@ -4,7 +4,10 @@
 > bundled sticker pack + Klipy search with placeholder key; translate pehle).
 > Code: `translate/` + `media/` + `ui/TranslatePanel.kt` + `ui/MediaPanels.kt` +
 > `ime/MlKitTranslateEngine.kt` + `media/MediaCommitController.kt`.
-> Tests: `TranslateTests.kt` + `MediaTests.kt` (136 + 87 assertions).
+> Tests: `TranslateTests.kt` + `MediaTests.kt`. Suite **930/930**.
+> **Update (round 3):** user ke order par Klipy ke **saare content types** tabs mein:
+> GIFs · Clips · Stickers · Memes (`EXPRESSION_TABS` = Gboard 5 + Clips + Memes),
+> aur API key **app ke andar** 🔑 dialog se save hoti hai (local.properties bhi chalta hai).
 
 User ke do sawaal:
 1. **Translate panel** Hindi↔English ho sakta hai kya?

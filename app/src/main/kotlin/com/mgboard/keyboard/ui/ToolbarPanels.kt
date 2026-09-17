@@ -65,7 +65,11 @@ fun EmojiPanel(model: KeyboardModel) {
     val gated = SymbolPanelData.tabGateReason(
         tab, hindi,
         editorSupportsImage = model.settings.mediaEditorSupports("image/gif") ||
-            model.settings.mediaEditorSupports("image/png"),
+            model.settings.mediaEditorSupports("image/png") ||
+            model.settings.mediaEditorSupports("image/jpeg") ||
+            model.settings.mediaEditorSupports("image/*"),
+        editorSupportsVideo = model.settings.mediaEditorSupports("video/mp4") ||
+            model.settings.mediaEditorSupports("video/*"),
     )
 
     Column(Modifier.fillMaxWidth().height(230.dp)) {
@@ -104,9 +108,11 @@ fun EmojiPanel(model: KeyboardModel) {
             return@Column
         }
 
-        // ── GIF / Stickers tabs apne panels kholte hain (search+grid alag hai) ──
+        // ── media tabs apne panels kholte hain (search+grid alag hai) ──────────
         if (tab == "Stickers") { StickersPanel(model); return@Column }
-        if (tab == "GIF") { GifPanel(model); return@Column }
+        if (tab == "GIF") { KlipyMediaPanel(model, com.mgboard.keyboard.media.KlipyApi.Kind.GIFS); return@Column }
+        if (tab == "Clips") { KlipyMediaPanel(model, com.mgboard.keyboard.media.KlipyApi.Kind.CLIPS); return@Column }
+        if (tab == "Memes") { KlipyMediaPanel(model, com.mgboard.keyboard.media.KlipyApi.Kind.MEMES); return@Column }
 
         // ── search box (.expression-search-box) ───────────────────────────────
         TextField(

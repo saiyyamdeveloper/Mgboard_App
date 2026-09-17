@@ -110,8 +110,14 @@ class PreviewSettingsSource(
         onToast("GIF sent: " + item.title)
         return previewEditorSupportsMedia
     }
-    override fun klipyAppKey(): String = ""       // preview mein bundled pack hi live
-    override fun klipyFetch(url: String, onResult: (com.mgboard.keyboard.media.MediaPage?) -> Unit) {
+    var previewKlipyKey = ""
+    override fun klipyAppKey(): String = previewKlipyKey
+    override fun setKlipyAppKey(key: String) { previewKlipyKey = key }
+    override fun klipyFetch(
+        url: String,
+        kind: com.mgboard.keyboard.media.KlipyApi.Kind,
+        onResult: (com.mgboard.keyboard.media.MediaPage?) -> Unit,
+    ) {
         onResult(null)
     }
 
