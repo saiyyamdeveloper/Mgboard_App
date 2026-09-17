@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <!-- ═══ grid-menu-project (Gboard verbatim strings) — HI ═══ -->
+    <!--
+  MgBoard — Grid Menu (⊞ "ज़्यादा सुविधाएं") strings — HINDI
+  Source: Gboard 18.3.1.977415014-beta resources.arsc — HI translations VERBATIM jahan available.
+  (✍ = Gboard mein exact HI nahi mila; MgBoard ka own translation — review karein)
+-->
+
+    <!-- ══════════ Grid menu (⊞ icon) ══════════ -->
+    <string name="grid_open_features_menu">सुविधा मेन्यू खोलें</string>
+    <!-- ✍ -->
+    <string name="grid_close_features_menu">सुविधा मेन्यू बंद करें</string>
+    <!-- ✍ -->
+    <string name="grid_more_features">ज़्यादा सुविधाएं</string>
+    <!-- 🟢 -->
+    <string name="grid_more_features_opened">ज़्यादा सुविधाएं खोली गईं</string>
+    <!-- ✍ (pattern: "…खोले गए") -->
+    <string name="grid_more_features_closed">ज़्यादा सुविधाएं बंद की गईं</string>
+    <!-- ✍ (pattern: "…बंद किए गए") -->
+    <string name="grid_access_all_features">कीबोर्ड की सभी सुविधा यहां पाएं</string>
+    <!-- 🟢 -->
+    <string name="grid_see_more_features">ज़्यादा सुविधाएं देखें</string>
+    <!-- 🟢 -->
+    <string name="grid_access_point_icon_order">एक्सेस पॉइंट आइकॉन का क्रम</string>
+    <!-- ✍ -->
+
+    <!-- Customize flow -->
+    <string name="grid_hold_drag_customize">कस्टमाइज़ करने के लिए दबाकर रखें और खींचें</string>
+    <!-- ✍ -->
+    <string name="grid_drag_reorganize">सुविधाओं को फिर से व्यवस्थित करने के लिए उन्हें खींचें और छोड़ें या उन्हें शॉर्टकट टॉप बार में जोड़ें</string>
+    <!-- 🟢 -->
+    <string name="grid_customize_feature_menus">सुविधा के मेन्यू अपनी पसंद के मुताबिक तैयार करें</string>
+    <!-- 🟢 -->
+    <string name="grid_customize_subtitle">अपनी पसंद के मुताबिक मेन्यू और शॉर्टकट सेट करें</string>
+    <!-- 🟢 -->
+    <string name="grid_finish_customizing">मेन्यू कस्टमाइज़ करना पूरा करें</string>
+    <!-- ✍ -->
+
+    <!-- Capacity -->
+    <string name="grid_icons_count_title">सुझाव पट्टी पर आइकॉन की संख्या</string>
+    <!-- ✍ -->
+    <string name="grid_icons_count_summary">सुझाव पट्टी पर दिखने वाले एक्सेस पॉइंट आइकॉन की संख्या तय करें.</string>
+    <!-- ✍ -->
+    <string name="grid_capacity_help">डिफ़ॉल्ट रूप से, सुझाव पट्टी पर अधिकतम 5 (लैंडस्केप मोड में 6) एक्सेस पॉइंट आइकॉन दिखते हैं. मान 3 से 8 के बीच होना चाहिए.</string>
+    <!-- ✍ -->
+    <string name="grid_order_help">दिखने वाले एक्सेस पॉइंट आइकॉन का क्रम तय करें, सेमिकोलन से अलग करके</string>
+    <!-- ✍ -->
+
+    <!-- Per-icon flags -->
+    <string name="grid_show_settings_icon">मेन्यू में सेटिंग आइकॉन दिखाएं या नहीं.</string>
+    <!-- ✍ -->
+    <string name="grid_show_theme_icon">मेन्यू में थीम आइकॉन दिखाएं या नहीं.</string>
+    <!-- ✍ -->
+    <string name="grid_show_handwriting_icon">मेन्यू में हस्तलेखन आइकॉन दिखाएं या नहीं.</string>
+    <!-- ✍ -->
+
+    <!-- Promotions -->
+    <string name="grid_open_symbols">ऑन-स्क्रीन सिंबल कीबोर्ड खोलें</string>
+    <!-- ✍ -->
+    <string name="grid_promo_clipboard">कई चीज़ें कॉपी और पेस्ट करनी हैं? क्लिपबोर्ड आज़माएं</string>
+    <!-- ✍ -->
+    <string name="grid_close_undo_promotion">अनडू एक्सेस पॉइंट का प्रमोशन बंद करें</string>
+    <!-- ✍ -->
+    <string name="grid_emoji_fast_row_intro_close">इमोजी फ़ास्ट-एक्सेस पंक्ति का परिचय बंद करें</string>
+    <!-- ✍ -->
+    <string name="grid_emoji_fast_row_remove_blocked">इमोजी फ़ास्ट-एक्सेस पंक्ति हटाएं. परिचय टूलटिप बंद होने तक यह क्लिक नहीं किया जा सकता</string>
+    <!-- ✍ -->
+    <string name="grid_undo_redo_rule">जब उपयोगकर्ता मौजूदा टेक्स्ट संपादित करता है, तो अनडू और रीडू चिप्स एक्सेस पॉइंट के ज़रिए सुझाव पट्टी पर दिखते हैं.</string>
+    <!-- ✍ -->
+
+    <!-- ══════════ GATES ══════════ -->
+    <string name="grid_gate_mic">बोली को लिखाई में बदलने की सुविधा चालू करने के लिए, Gboard को माइक्रोफ़ोन ऐक्सेस करने की अनुमति चाहिए.</string>
+    <!-- ✍ -->
+    <string name="grid_gate_camera">टेक्स्ट स्कैन चालू करने के लिए, Gboard को कैमरा ऐक्सेस करने की अनुमति चाहिए.</string>
+    <!-- ✍ -->
+    <string name="grid_gate_contacts">क्विक इंसर्ट को आपके संपर्क ऐक्सेस करने की अनुमति दें?</string>
+    <!-- ✍ -->
+    <string name="grid_gate_images">क्लिपबोर्ड स्क्रीनशॉट सुविधा के लिए आपकी तस्वीरों की पूरी ऐक्सेस चाहिए. सिस्टम सेटिंग &gt; ऐप्स &gt; Gboard &gt; अनुमतियां में जाकर अनुमति बदलें</string>
+    <!-- ✍ -->
+    <string name="grid_gate_settings_field">इस इनपुट फ़ील्ड में कीबोर्ड सेटिंग उपलब्ध नहीं हैं</string>
+    <!-- ✍ -->
+    <string name="grid_gate_theme_field">इस इनपुट फ़ील्ड में थीम सेटिंग उपलब्ध नहीं हैं</string>
+    <!-- ✍ -->
+    <string name="grid_gate_handwriting_field">इस इनपुट फ़ील्ड में हस्तलेखन डेमो उपलब्ध नहीं है</string>
+    <!-- ✍ -->
+    <string name="grid_gate_seamless_voice">इस इनपुट फ़ील्ड में सहज बोली-से-लिखाई उपलब्ध नहीं है</string>
+    <!-- ✍ -->
+    <string name="grid_gate_feature_field">इस फ़ील्ड में यह सुविधा उपलब्ध नहीं है</string>
+    <!-- ✍ -->
+    <string name="grid_gate_language">आपकी मौजूदा Gboard भाषा में एडवांस सुविधाएं उपलब्ध नहीं हैं.</string>
+    <!-- ✍ -->
+    <string name="grid_gate_device_language">आपकी मौजूदा डिवाइस भाषा में उपलब्ध नहीं है. इस्तेमाल करने के लिए डिवाइस की भाषा Gboard की भाषा से मिलाएं.</string>
+    <!-- ✍ -->
+    <string name="grid_gate_work_profile">वर्क प्रोफ़ाइल के ऐप्स में एडवांस सुविधाएं फ़िलहाल उपलब्ध नहीं हैं. इस्तेमाल करने के लिए निजी ऐप्स पर जाएं.</string>
+    <!-- ✍ -->
+    <string name="grid_gate_incognito">गुप्त मोड में बोली को लिखाई में बदलने की सुविधा काम नहीं करती</string>
+    <!-- 🟢 -->
+    <string name="grid_gate_unfolded">इमोजी कीबोर्ड खोलने के लिए कीबोर्ड टूलबार पर बटन दिखाएं. सिर्फ़ अनफोल्ड किए गए डिवाइस पर उपलब्ध.</string>
+    <!-- ✍ -->
+    <string name="grid_gate_download">भाषा डाउनलोड पूरा होने के बाद, बोली को लिखाई में बदलने की एडवांस सुविधाएं उपलब्ध होंगी</string>
+    <!-- ✍ -->
+    <string name="grid_gate_proofread_lang">आपकी इस्तेमाल की जा रही किसी एक भाषा के लिए Gboard प्रूफ़रीडिंग सपोर्ट नहीं करता</string>
+    <!-- ✍ -->
+    <string name="grid_gate_no_resize">मौजूदा कीबोर्ड का आकार बदलना सपोर्ट नहीं करता</string>
+    <!-- ✍ -->
+    <string name="grid_gate_writing_tools_text">लेखन टूल इस्तेमाल करने के लिए कुछ टेक्स्ट लिखें</string>
+    <!-- ✍ -->
+    <string name="grid_gate_handwriting_app">यह ऐप यहां स्टाइलस हस्तलेखन गेस्चर सपोर्ट नहीं करता</string>
+    <!-- ✍ -->
+
+    <!-- ══════════ DISABLED / ERROR ══════════ -->
+    <string name="grid_disabled_empty_editor">एडिटर खाली होने की वजह से बंद है</string>
+    <!-- ✍ -->
+    <string name="grid_disabled_no_text_selected">कोई टेक्स्ट चुना नहीं गया, इसलिए बंद है</string>
+    <!-- ✍ -->
+    <string name="grid_disabled_items_selected">आइटम चुने जाने की वजह से बंद है.</string>
+    <!-- ✍ -->
+    <string name="grid_disabled_opt_in">ऑप्ट-इन बंद होने की वजह से बंद है</string>
+    <!-- ✍ -->
+    <string name="grid_disabled_no_room">डायलॉग के लिए जगह न होने की वजह से बंद है.</string>
+    <!-- ✍ -->
+    <string name="grid_err_not_available_in_app">इस ऐप में कमांड उपलब्ध नहीं है</string>
+    <!-- ✍ -->
+    <string name="grid_err_not_supported">कमांड सपोर्ट नहीं है. विकल्प देखें.</string>
+    <!-- ✍ -->
+    <string name="grid_err_tool_unavailable">फ़िलहाल यह टूल इस्तेमाल नहीं किया जा सकता. बाद में फिर कोशिश करें.</string>
+    <!-- ✍ -->
+    <string name="grid_err_mic_in_use">शुरू नहीं हो सकता. माइक्रोफ़ोन इस्तेमाल में है.</string>
+    <!-- ✍ -->
+    <string name="grid_err_proofread_field">इस फ़ील्ड का टेक्स्ट प्रूफ़रीड नहीं किया जा सकता</string>
+    <!-- ✍ -->
+    <string name="grid_err_offline_retry">कनेक्ट नहीं हो सकता. ऑफ़लाइन फिर कोशिश करें.</string>
+    <!-- ✍ -->
+    <string name="grid_err_offline_tap_retry">कनेक्ट नहीं हो सकता. फिर कोशिश करने के लिए आइकॉन टैप करें.</string>
+    <!-- ✍ -->
+    <string name="grid_err_network">कनेक्ट नहीं हो सकता. अपना वाई-फ़ाई या मोबाइल नेटवर्क देखें और फिर कोशिश करें.</string>
+    <!-- ✍ -->
+    <string name="grid_err_google_unreachable">अभी Google तक नहीं पहुंचा जा सकता</string>
+    <!-- ✍ -->
+    <string name="grid_err_server">सर्वर से कनेक्ट नहीं हो सकता. बाद में फिर कोशिश करें.</string>
+    <!-- ✍ -->
+    <string name="grid_err_generic">कुछ गड़बड़ हो गई. फिर से कोशिश करें.</string>
+    <!-- ✍ -->
+    <string name="grid_err_process_results">नतीजे प्रोसेस नहीं हो सके</string>
+    <!-- ✍ -->
+    <string name="grid_err_gifs">GIF लोड नहीं हो सके.</string>
+    <!-- ✍ -->
+    <string name="grid_err_lang_download">यह भाषा डाउनलोड नहीं हो सकी</string>
+    <!-- ✍ -->
+    <string name="grid_err_no_suggestions">इसके लिए सुझाव नहीं दिखाए जा सकते. कुछ और आज़माएं.</string>
+    <!-- ✍ -->
+
+    <!-- ══════════ PANEL headers ══════════ -->
+    <string name="panel_emoji_title">इमोजी वाला पैनल</string>
+    <!-- 🟢 -->
+    <string name="panel_emoji_close">इमोजी वाला पैनल बंद करें</string>
+    <!-- 🟢 -->
+    <string name="panel_clipboard_title">क्लिपबोर्ड</string>
+    <!-- 🟢 -->
+    <string name="panel_clipboard_close">क्लिपबोर्ड छिपाएं</string>
+    <!-- ✍ -->
+    <string name="panel_translate_title">अनुवाद</string>
+    <!-- 🟢 -->
+    <string name="panel_translate_close">अनुवाद छिपाएं</string>
+    <!-- ✍ -->
+    <string name="panel_writing_tools_title">लेखन टूल</string>
+    <!-- 🟢 -->
+    <string name="panel_writing_tools_close">लेखन टूल बंद करें</string>
+    <!-- ✍ -->
+    <string name="panel_edit_title">एडिट मेन्यू</string>
+    <!-- ✍ -->
+    <string name="panel_edit_close">एडिट मेन्यू बंद करें</string>
+    <!-- ✍ -->
+    <string name="panel_more_expr_title">और एक्सप्रेशन</string>
+    <!-- ✍ -->
+    <string name="panel_more_expr_close">और एक्सप्रेशन की सूची बंद करें</string>
+    <!-- ✍ -->
+    <string name="panel_symbols_title">सिंबल मोड</string>
+    <!-- ✍ -->
+    <string name="panel_symbols_close">सिंबल वाला पैनल बंद करें</string>
+    <!-- ✍ -->
+    <string name="panel_back_to_letter">लेटर कीबोर्ड पर वापस जाएं</string>
+    <!-- ✍ -->
+    <string name="panel_back_to_previous">पिछली स्थिति पर वापस जाएं</string>
+    <!-- ✍ -->
+
+    <!-- ══════════ Modes / exits ══════════ -->
+    <string name="mode_exit_floating">फ़्लोटिंग कीबोर्ड से बाहर निकलें</string>
+    <!-- ✍ -->
+    <string name="mode_drag_exit_floating">फ़्लोटिंग मोड से बाहर निकलने के लिए यहां खींचें</string>
+    <!-- ✍ -->
+    <string name="mode_exit_one_handed">एक हाथ वाले मोड से बाहर निकल रहे हैं</string>
+    <!-- 🟢 -->
+    <string name="mode_switch_left_handed">बाएं हाथ वाले कीबोर्ड पर जाएं</string>
+    <!-- ✍ -->
+    <string name="mode_switch_right_handed">दाएं हाथ वाले कीबोर्ड पर जाएं</string>
+    <!-- ✍ -->
+    <string name="mode_switch_full_handwriting">पूर्णस्क्रिन हस्तलेखन पर जाएं</string>
+    <!-- ✍ -->
+    <string name="mode_switch_half_handwriting">आधा स्क्रीन हस्तलेखन पर जाएं</string>
+    <!-- ✍ -->
+    <string name="mode_finish_resize">कीबोर्ड का आकार और स्थिति बदलना पूरा करें</string>
+    <!-- ✍ -->
+    <string name="mode_change_size_position">कीबोर्ड का आकार या स्थिति बदलें</string>
+    <!-- ✍ -->
+    <string name="mode_split_note">कीबोर्ड को स्प्लिट लेआउट पर सेट करने पर, कुछ कुंजियां दोनों तरफ़ दोहराई जाएंगी</string>
+    <!-- ✍ -->
+
+    <!-- ══════════ Item labels (HI) ══════════ -->
+    <string name="item_clipboard">क्लिपबोर्ड</string>
+    <!-- 🟢 -->
+    <string name="item_translate">अनुवाद</string>
+    <!-- 🟢 -->
+    <string name="item_emoji">इमोजी</string>
+    <!-- 🟢 -->
+    <string name="item_gif">GIF</string>
+    <string name="item_sticker">स्टिकर</string>
+    <!-- 🟢 -->
+    <string name="item_settings">सेटिंग</string>
+    <!-- 🟢 -->
+    <string name="item_theme">थीम</string>
+    <!-- 🟢 -->
+    <string name="item_voice_typing">बोली को लिखाई में बदलने की आसान सुविधा</string>
+    <!-- 🟢 -->
+    <string name="item_text_editing">टेक्स्ट एडिटिंग</string>
+    <!-- ✍ -->
+    <string name="item_one_handed">एक हाथ वाला</string>
+    <!-- 🟢 -->
+    <string name="item_floating">फ़्लोटिंग</string>
+    <!-- 🟢 -->
+    <string name="item_resize">आकार बदलें</string>
+    <!-- ✍ -->
+    <string name="item_split">स्प्लिट</string>
+    <!-- ✍ -->
+    <string name="item_handwriting">हस्तलेखन</string>
+    <!-- 🟢 -->
+    <string name="item_symbols">सिंबल</string>
+    <!-- ✍ -->
+    <string name="item_number_row">नंबर पंक्ति</string>
+    <!-- ✍ -->
+    <string name="item_morse">मोर्स कोड</string>
+    <!-- 🟢 -->
+    <string name="item_writing_tools">लेखन टूल</string>
+    <!-- 🟢 -->
+    <string name="item_proofread">प्रूफ़रीड</string>
+    <!-- 🟢 -->
+    <string name="item_rewrite">रीराइट</string>
+    <!-- ✍ -->
+    <string name="item_quick_insert">क्विक इंसर्ट</string>
+    <!-- ✍ -->
+    <string name="item_emoji_kitchen">इमोजी किचन</string>
+    <!-- 🟢 -->
+    <string name="item_more_expressions">और एक्सप्रेशन</string>
+    <!-- ✍ -->
+    <string name="item_personal_dictionary">निजी शब्दकोश</string>
+    <!-- 🟢 -->
+    <string name="item_undo">अनडू</string>
+    <!-- ✍ -->
+    <string name="item_redo">रीडू</string>
+    <!-- ✍ -->
+    <string name="item_scan_text">टेक्स्ट स्कैन करें</string>
+    <!-- ✍ -->
+    <string name="item_share">शेयर करें</string>
+
+    <!-- ═══ voice-pill-project (Gboard APK 18.3.1-beta se verbatim) — HI ═══ -->
+    <string name="voice_speak_now">अब बोलें</string>
+    <string name="voice_paused">रोकी गई</string>
+    <string name="voice_paused_full">बोली को लिखाई में बदलने की सुविधा रोकी गई</string>
+    <string name="voice_toolbar">टूलबार</string>
+    <string name="voice_show_toolbar">टूलबार दिखाएं</string>
+    <string name="voice_minimize_toolbar">टूलबार को छोटा करें और सुझावों को छिपाएं</string>
+    <string name="voice_switch_vertical">वर्टिकल टूलबार पर स्विच करें</string>
+    <string name="voice_horizontal">क्षैतिज</string>
+    <string name="voice_show_clipboard">क्लिपबोर्ड दिखाएं</string>
+    <string name="voice_show_translate">अनुवाद दिखाएं</string>
+    <string name="voice_show_emoji">इमोजी दिखाएं</string>
+    <string name="voice_settings">सेटिंग</string>
+    <string name="voice_symbols">चिह्न</string>
+    <string name="voice_hold_drag">टूलबार को एक जगह से दूसरी जगह ले जाने के लिए, उसे दबाकर खींचें और सही जगह पर छोड़ें</string>
+    <string name="voice_keyboard_icon_help">टूलबार से कीबोर्ड पर तेज़ी से स्विच करें. इसके लिए, बस कीबोर्ड आइकॉन पर टैप करें.</string>
+    <string name="voice_onboarding">टूलबार खोजने के लिए, बोली को लिखाई में बदलने की सुविधा इस्तेमाल करने के दौरान, अपने कीबोर्ड पर छोटा करें पर टैप करें</string>
+    <string name="voice_open_more_options">अन्य वॉइस विकल्प खोलें</string>
+    <string name="voice_more_options_opened">अन्य वॉइस विकल्प खुले</string>
+    <string name="voice_more_options_closed">अन्य वॉइस विकल्प बंद हुए</string>
+    <string name="voice_go_to_text_field">बोली को लिखाई में बदलने की सुविधा इस्तेमाल करने के लिए किसी टेक्स्ट फ़ील्ड पर जाएं</string>
+    <string name="voice_mic_permission_needed">बोली को लिखाई में बदलने के लिए माइक्रोफ़ोन की अनुमति चाहिए</string>
+    <string name="voice_recognition_unavailable">इस डिवाइस पर speech recognition उपलब्ध नहीं है</string>
+    <string name="voice_locked_horizontal">टूलबार क्षैतिज मोड में लॉक है</string>
+    <string name="voice_pref_offline">उपलब्ध हो तो डिवाइस पर (ऑफ़लाइन) पहचान को प्राथमिकता दें</string>
+    <string name="voice_pref_reset_position">टूलबार की स्थिति रीसेट करें</string>
+</resources>

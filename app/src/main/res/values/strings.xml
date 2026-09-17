@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MgBoard</string>
+    <string name="settings_title">Settings</string>
+
+    <!-- launcher -->
+    <string name="home_subtitle">%1$d pages · %2$d settings items (Gboard parity)</string>
+    <string name="home_open_settings">Open Settings</string>
+
+    <!-- settings chrome -->
+    <string name="sg_search_hint">Search keyboard</string>
+    <string name="sg_search_count">%1$d results</string>
+    <string name="sg_search_empty">No results</string>
+    <string name="sg_page_count">%1$d items</string>
+    <string name="sg_home_footer">%1$d items · %2$d pages — labels, summaries and search keywords ported 1:1 from Mgboard_Web</string>
+    <string name="sg_open">Open</string>
+    <string name="sg_back">Back</string>
+
+    <!-- honest gating (hide-nothing principle) -->
+    <string name="sg_needs_ime">Needs the MgBoard keyboard service</string>
+    <string name="sg_pending">%1$s needs the MgBoard keyboard service (next milestone)</string>
+    <string name="sg_unavailable">Command not available in this app</string>
+
+    <!-- actions that really work today -->
+    <string name="sg_cp_cleared">Clipboard history cleared</string>
+    <string name="sg_learned_deleted">Learned words deleted</string>
+    <string name="sg_settings_reset">Settings reset to defaults</string>
+    <string name="sg_about_text">MgBoard · Masaram Gondi keyboard · web: github.com/saiyyamdeveloper/Mgboard_Web</string>
+    <string name="ime_label">MgBoard</string>
+    <string name="subtype_gondi">Masaram Gondi</string>
+    <string name="ime_enable_title">MgBoard keyboard chalu karein</string>
+    <string name="ime_enable_step1">1. Settings → System → Languages &amp; input → On-screen keyboard → Manage on-screen keyboards</string>
+    <string name="ime_enable_step2">2. "MgBoard" ko ON karein</string>
+    <string name="ime_enable_step3">3. Kisi bhi text field mein globe icon 🌐 dabakar MgBoard chunein</string>
+    <string name="ime_open_settings">Keyboard settings</string>
+    <string name="ime_open_ime_settings">System keyboard settings</string>
+
+
+    <!-- ═══ grid-menu-project (Gboard verbatim strings) — EN ═══ -->
+    <!--
+  MgBoard — Grid Menu (⊞ "More features") strings — ENGLISH
+  Source: Gboard 18.3.1.977415014-beta resources.arsc (verbatim where possible)
+  See: grid-menu-project/RESEARCH.md + FUNCTIONS-AND-LOGIC.md
+-->
+
+    <!-- ══════════ Grid menu (⊞ icon) — Gboard verbatim ══════════ -->
+    <string name="grid_open_features_menu">Open features menu</string>
+    <string name="grid_close_features_menu">Close features menu</string>
+    <string name="grid_more_features">More features</string>
+    <string name="grid_more_features_opened">More features opened</string>
+    <string name="grid_more_features_closed">More features closed</string>
+    <string name="grid_access_all_features">Access all keyboard features here</string>
+    <string name="grid_see_more_features">See more features</string>
+    <string name="grid_access_point_icon_order">Access point icon order</string>
+    <!-- Customize flow (§0.4) -->
+    <string name="grid_hold_drag_customize">Hold and drag to customize</string>
+    <string name="grid_drag_reorganize">Drag to reorganize, or place in your shortcut top bar</string>
+    <string name="grid_customize_feature_menus">Customize feature menus</string>
+    <string name="grid_customize_subtitle">Customize your menu and shortcuts</string>
+    <string name="grid_finish_customizing">Finish customizing feature menus</string>
+    <!-- Capacity rules (§0.5) -->
+    <string name="grid_icons_count_title">Icons count on suggestions strip</string>
+    <string name="grid_icons_count_summary">Define the access point icons count that shown on the suggestion strip.</string>
+    <string name="grid_capacity_help">By default, the suggestions strip shows a maximum of 5 (or 6 on landscape mode) access point icons. Valid value should between 3 and 8, inclusive</string>
+    <string name="grid_order_help">Define the order of displayed access point icons, separated by semicolon</string>
+    <!-- Per-icon visibility flags -->
+    <string name="grid_show_settings_icon">Whether to show the Settings icon in the feature menu.</string>
+    <string name="grid_show_theme_icon">Whether to show the Theme icon in the feature menu.</string>
+    <string name="grid_show_handwriting_icon">Whether to show the Handwriting icon in the feature menu.</string>
+    <!-- Symbols / undo promotions -->
+    <string name="grid_open_symbols">Open the on-screen symbols keyboard</string>
+    <string name="grid_promo_clipboard">Copy &amp; paste multiple items? Try Clipboard</string>
+    <string name="grid_close_undo_promotion">Close undo access point promotion</string>
+    <string name="grid_emoji_fast_row_intro_close">Close emoji fast-access row introduction</string>
+    <string name="grid_emoji_fast_row_remove_blocked">Remove emoji fast-access row. Not clickable until the introduction tooltip is closed</string>
+    <string name="grid_undo_redo_rule">The Undo and Redo chips appear in the suggestion strip via access point, when user edits existing text.</string>
+    <!-- ══════════ GATES — Gboard verbatim (§0.3) ══════════ -->
+    <string name="grid_gate_mic">Gboard needs access to the microphone in order to enable voice typing.</string>
+    <string name="grid_gate_camera">Gboard needs access to the camera in order to enable Scan text.</string>
+    <string name="grid_gate_contacts">Allow Quick Insert to access your contacts?</string>
+    <string name="grid_gate_images">Clipboard screenshot feature requires full access to your images. Update the permission in System settings &gt; Apps &gt; Gboard &gt; Permissions</string>
+    <string name="grid_gate_settings_field">Gboard settings are not available in this input field</string>
+    <string name="grid_gate_theme_field">Theme settings are not available in this input field</string>
+    <string name="grid_gate_handwriting_field">Handwriting demo is not available in this input field</string>
+    <string name="grid_gate_seamless_voice">Seamless voice typing is not available in this input field</string>
+    <string name="grid_gate_feature_field">This feature is not available in this field</string>
+    <string name="grid_gate_language">Advanced features aren\'t available in your current Gboard language.</string>
+    <string name="grid_gate_device_language">Not available in your current device language. Change your device language to match your Gboard language to use this.</string>
+    <string name="grid_gate_work_profile">Advanced features are currently unavailable for apps in a work profile. Switch to your personal apps to use this.</string>
+    <string name="grid_gate_incognito">Voice typing is disabled in Incognito Mode</string>
+    <string name="grid_gate_unfolded">Show a button on the keyboard toolbar to open emoji keyboard. Only available in unfolded device state.</string>
+    <string name="grid_gate_download">Advanced voice typing features will be available once the language download is complete</string>
+    <string name="grid_gate_proofread_lang">Gboard doesn\'t support proofreading for one of the languages that you\'re using</string>
+    <string name="grid_gate_no_resize">Current keyboard does not support resizing</string>
+    <string name="grid_gate_writing_tools_text">Enter some text to use writing tools</string>
+    <string name="grid_gate_handwriting_app">The app doesn\'t support the handwriting gesture here</string>
+    <!-- ══════════ DISABLED / ERROR states (§2.3) ══════════ -->
+    <string name="grid_disabled_empty_editor">Disabled because empty editor</string>
+    <string name="grid_disabled_no_text_selected">Disabled because no text selected</string>
+    <string name="grid_disabled_items_selected">Disabled because items are selected.</string>
+    <string name="grid_disabled_opt_in">Disabled because opt-in is disabled</string>
+    <string name="grid_disabled_no_room">Disabled because there is no enough room for the dialog.</string>
+    <string name="grid_err_not_available_in_app">Command not available in this app</string>
+    <string name="grid_err_not_supported">Command not supported. Check the options.</string>
+    <string name="grid_err_tool_unavailable">Can\'t use this tool at the moment. Please try again later.</string>
+    <string name="grid_err_mic_in_use">Can\'t start. Microphone in use.</string>
+    <string name="grid_err_proofread_field">Can\'t proofread text in this field</string>
+    <string name="grid_err_offline_retry">Can\'t connect. Retry offline.</string>
+    <string name="grid_err_offline_tap_retry">Can\'t connect. Tap icon to retry.</string>
+    <string name="grid_err_network">Can\'t connect. Check your Wi-Fi or mobile network and try again.</string>
+    <string name="grid_err_google_unreachable">Can\'t reach Google right now</string>
+    <string name="grid_err_server">Can\'t connect to the server. Try again later.</string>
+    <string name="grid_err_generic">Something went wrong. Please try again.</string>
+    <string name="grid_err_process_results">Failed to process results</string>
+    <string name="grid_err_gifs">Failed to fetch GIFs.</string>
+    <string name="grid_err_lang_download">Failed to download this language</string>
+    <string name="grid_err_no_suggestions">Can\'t show suggestions for this. Please try something else.</string>
+    <!-- ══════════ PANEL headers / close labels (§2.1) ══════════ -->
+    <string name="panel_emoji_title">Emoji panel</string>
+    <string name="panel_emoji_close">Close the emoji panel</string>
+    <string name="panel_clipboard_title">Clipboard</string>
+    <string name="panel_clipboard_close">Hide clipboard</string>
+    <string name="panel_translate_title">Translate</string>
+    <string name="panel_translate_close">Hide translate</string>
+    <string name="panel_writing_tools_title">Writing Tools</string>
+    <string name="panel_writing_tools_close">Close Writing Tools</string>
+    <string name="panel_edit_title">Edit menu</string>
+    <string name="panel_edit_close">Close edit menu</string>
+    <string name="panel_more_expr_title">More expressions</string>
+    <string name="panel_more_expr_close">Close more expressions list</string>
+    <string name="panel_symbols_title">Symbols mode</string>
+    <string name="panel_symbols_close">Close the symbols panel</string>
+    <string name="panel_back_to_letter">Back to letter keyboard</string>
+    <string name="panel_back_to_previous">Back to previous state</string>
+    <!-- ══════════ Keyboard modes / exits (§2.2) ══════════ -->
+    <string name="mode_exit_floating">Exit floating keyboard</string>
+    <string name="mode_drag_exit_floating">Drag here to exit floating mode</string>
+    <string name="mode_exit_one_handed">Exit one-handed mode</string>
+    <string name="mode_switch_left_handed">Switch to left-handed keyboard</string>
+    <string name="mode_switch_right_handed">Switch to right-handed keyboard</string>
+    <string name="mode_switch_full_handwriting">Switch to full screen handwriting</string>
+    <string name="mode_switch_half_handwriting">Switch to half screen handwriting</string>
+    <string name="mode_finish_resize">Finish changing keyboard size and position</string>
+    <string name="mode_change_size_position">Change keyboard size or position</string>
+    <string name="mode_split_note">When the keyboard is set to split layout, some keys will be duplicated on both sides</string>
+    <!-- ══════════ Item labels (EN) ══════════ -->
+    <string name="item_clipboard">Clipboard</string>
+    <string name="item_translate">Translate</string>
+    <string name="item_emoji">Emoji</string>
+    <string name="item_gif">GIF</string>
+    <string name="item_sticker">Sticker</string>
+    <string name="item_settings">Settings</string>
+    <string name="item_theme">Theme</string>
+    <string name="item_voice_typing">Voice typing</string>
+    <string name="item_text_editing">Text editing</string>
+    <string name="item_one_handed">One-handed</string>
+    <string name="item_floating">Floating</string>
+    <string name="item_resize">Resize</string>
+    <string name="item_split">Split</string>
+    <string name="item_handwriting">Handwriting</string>
+    <string name="item_symbols">Symbols</string>
+    <string name="item_number_row">Number row</string>
+    <string name="item_morse">Morse code</string>
+    <string name="item_writing_tools">Writing Tools</string>
+    <string name="item_proofread">Proofread</string>
+    <string name="item_rewrite">Rewrite</string>
+    <string name="item_quick_insert">Quick Insert</string>
+    <string name="item_emoji_kitchen">Emoji Kitchen</string>
+    <string name="item_more_expressions">More expressions</string>
+    <string name="item_personal_dictionary">Personal dictionary</string>
+    <string name="item_undo">Undo</string>
+    <string name="item_redo">Redo</string>
+    <string name="item_scan_text">Scan text</string>
+    <string name="item_share">Share</string>
+
+    <!-- ═══ voice-pill-project (Gboard APK 18.3.1-beta se verbatim) — EN ═══ -->
+    <string name="voice_speak_now">Speak now</string>
+    <string name="voice_paused">Paused</string>
+    <string name="voice_listening">Listening…</string>
+    <string name="voice_just_speak">Just speak naturally</string>
+    <string name="voice_stop_dictation">Stop dictation</string>
+    <string name="voice_exit_dictation">Exit dictation mode</string>
+    <string name="voice_collapse_keyboard">Collapse keyboard</string>
+    <string name="voice_minimize_keyboard">Minimize keyboard</string>
+    <string name="voice_minimize_toolbar">Minimize toolbar and hide suggestions</string>
+    <string name="voice_show_toolbar">Show toolbar</string>
+    <string name="voice_toolbar">Toolbar</string>
+    <string name="voice_show_clipboard">Show clipboard</string>
+    <string name="voice_show_translate">Show translate</string>
+    <string name="voice_show_emoji">Show emoji</string>
+    <string name="voice_show_voice_commands">Show voice commands</string>
+    <string name="voice_all_voice_commands">All voice commands</string>
+    <string name="voice_hide_voice_commands">Hide voice commands</string>
+    <string name="voice_close_voice_command_list">Close voice command list</string>
+    <string name="voice_switch_vertical">Switch to vertical toolbar</string>
+    <string name="voice_switch_horizontal">Switch to horizontal toolbar</string>
+    <string name="voice_hold_drag">Hold and drag to move toolbar</string>
+    <string name="voice_open_more_options">Open more voice options</string>
+    <string name="voice_more_options_opened">More voice options opened</string>
+    <string name="voice_more_options_closed">More voice options closed</string>
+    <string name="voice_close_more_options">Close more voice options</string>
+    <string name="voice_hide_keyboard_while_typing">Hide your keyboard while voice typing</string>
+    <string name="voice_keyboard_icon_help">Quickly switch from the toolbar to the keyboard. Just tap the keyboard icon.</string>
+    <string name="voice_onboarding">To quickly find the toolbar, tap MINIMIZE minimize icon on your keyboard while voice typing</string>
+    <string name="voice_use_toolbar">Use the toolbar for easy voice typing</string>
+    <string name="voice_pref_enable_title">Enable voice toolbar and start voice typing automatically when keyboard is shown</string>
+    <string name="voice_pref_force_horizontal">Force the toolbar in horizontal mode and disable dragging</string>
+    <string name="voice_pref_vertical_offset">Vertical offset of docked horizontal toolbar</string>
+    <string name="voice_pref_vertical_offset_summary">An integer value in pixels used to move the docked horizontal toolbar down.</string>
+    <string name="voice_symbols">Symbols</string>
+    <string name="voice_symbols_caps">SYMBOLS</string>
+    <string name="voice_symbol_keyboard">Symbol keyboard</string>
+    <string name="voice_symbols_mode">Symbols mode</string>
+    <string name="voice_cat_recent">Recent</string>
+    <string name="voice_cat_numbers">Numbers</string>
+    <string name="voice_cat_brackets">Brackets</string>
+    <string name="voice_cat_arrows">Arrows</string>
+    <string name="voice_cat_mathematics">Mathematics</string>
+    <string name="voice_cat_list">List</string>
+    <string name="voice_unsupported_command">Unsupported voice command</string>
+    <string name="voice_rephrase_command">Voice command to rephrase the text</string>
+    <string name="voice_go_to_text_field">Go to a text field to use dictation</string>
+    <string name="voice_offline_dictation">Faster voice typing, Offline dictation, Local speech</string>
+    <string name="voice_pref_offline">Prefer on-device (offline) recognition when available</string>
+    <string name="voice_pref_reset_position">Reset toolbar position</string>
+    <string name="voice_mic_permission_needed">Microphone permission is needed for voice typing</string>
+    <string name="voice_recognition_unavailable">Speech recognition is not available on this device</string>
+    <string name="voice_locked_horizontal">Toolbar is locked in horizontal mode</string>
+    <string name="voice_paused_full">Voice typing paused</string>
+    <string name="voice_settings">Settings</string>
+    <string name="voice_horizontal">Horizontal</string>
+</resources>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Masaram Gondi font (U+11D00–U+11D59) APK ke andar bundle kiya gaya hai.
+  Source: Noto Sans Masaram Gondi (SIL Open Font License 1.1) — res/font/OFL-masaram-gondi.txt
+  Android ke system fonts mein yeh script nahi hoti, isliye bina iske Gondi glyph
+  tofu (□□) dikhte. Web app isi font ko CDN se load karti hai.
+-->
+<font-family xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <font
+        android:font="@font/noto_sans_masaram_gondi"
+        android:fontStyle="normal"
+        android:fontWeight="400"
+        app:font="@font/noto_sans_masaram_gondi"
+        app:fontStyle="normal"
+        app:fontWeight="400" />
+</font-family>

@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  MgBoard — Grid Menu (⊞ "More features") strings — ENGLISH
+  Source: Gboard 18.3.1.977415014-beta resources.arsc (verbatim where possible)
+  See: grid-menu-project/RESEARCH.md + FUNCTIONS-AND-LOGIC.md
+-->
+<resources>
+
+    <!-- ══════════ Grid menu (⊞ icon) — Gboard verbatim ══════════ -->
+    <string name="grid_open_features_menu">Open features menu</string>
+    <string name="grid_close_features_menu">Close features menu</string>
+    <string name="grid_more_features">More features</string>
+    <string name="grid_more_features_opened">More features opened</string>
+    <string name="grid_more_features_closed">More features closed</string>
+    <string name="grid_access_all_features">Access all keyboard features here</string>
+    <string name="grid_see_more_features">See more features</string>
+    <string name="grid_access_point_icon_order">Access point icon order</string>
+
+    <!-- Customize flow (§0.4) -->
+    <string name="grid_hold_drag_customize">Hold and drag to customize</string>
+    <string name="grid_drag_reorganize">Drag to reorganize, or place in your shortcut top bar</string>
+    <string name="grid_customize_feature_menus">Customize feature menus</string>
+    <string name="grid_customize_subtitle">Customize your menu and shortcuts</string>
+    <string name="grid_finish_customizing">Finish customizing feature menus</string>
+
+    <!-- Capacity rules (§0.5) -->
+    <string name="grid_icons_count_title">Icons count on suggestions strip</string>
+    <string name="grid_icons_count_summary">Define the access point icons count that shown on the suggestion strip.</string>
+    <string name="grid_capacity_help">By default, the suggestions strip shows a maximum of 5 (or 6 on landscape mode) access point icons. Valid value should between 3 and 8, inclusive</string>
+    <string name="grid_order_help">Define the order of displayed access point icons, separated by semicolon</string>
+
+    <!-- Per-icon visibility flags -->
+    <string name="grid_show_settings_icon">Whether to show the Settings icon in the feature menu.</string>
+    <string name="grid_show_theme_icon">Whether to show the Theme icon in the feature menu.</string>
+    <string name="grid_show_handwriting_icon">Whether to show the Handwriting icon in the feature menu.</string>
+
+    <!-- Symbols / undo promotions -->
+    <string name="grid_open_symbols">Open the on-screen symbols keyboard</string>
+    <string name="grid_promo_clipboard">Copy &amp; paste multiple items? Try Clipboard</string>
+    <string name="grid_close_undo_promotion">Close undo access point promotion</string>
+    <string name="grid_emoji_fast_row_intro_close">Close emoji fast-access row introduction</string>
+    <string name="grid_emoji_fast_row_remove_blocked">Remove emoji fast-access row. Not clickable until the introduction tooltip is closed</string>
+    <string name="grid_undo_redo_rule">The Undo and Redo chips appear in the suggestion strip via access point, when user edits existing text.</string>
+
+    <!-- ══════════ GATES — Gboard verbatim (§0.3) ══════════ -->
+    <string name="grid_gate_mic">Gboard needs access to the microphone in order to enable voice typing.</string>
+    <string name="grid_gate_camera">Gboard needs access to the camera in order to enable Scan text.</string>
+    <string name="grid_gate_contacts">Allow Quick Insert to access your contacts?</string>
+    <string name="grid_gate_images">Clipboard screenshot feature requires full access to your images. Update the permission in System settings &gt; Apps &gt; Gboard &gt; Permissions</string>
+    <string name="grid_gate_settings_field">Gboard settings are not available in this input field</string>
+    <string name="grid_gate_theme_field">Theme settings are not available in this input field</string>
+    <string name="grid_gate_handwriting_field">Handwriting demo is not available in this input field</string>
+    <string name="grid_gate_seamless_voice">Seamless voice typing is not available in this input field</string>
+    <string name="grid_gate_feature_field">This feature is not available in this field</string>
+    <string name="grid_gate_language">Advanced features aren\'t available in your current Gboard language.</string>
+    <string name="grid_gate_device_language">Not available in your current device language. Change your device language to match your Gboard language to use this.</string>
+    <string name="grid_gate_work_profile">Advanced features are currently unavailable for apps in a work profile. Switch to your personal apps to use this.</string>
+    <string name="grid_gate_incognito">Voice typing is disabled in Incognito Mode</string>
+    <string name="grid_gate_unfolded">Show a button on the keyboard toolbar to open emoji keyboard. Only available in unfolded device state.</string>
+    <string name="grid_gate_download">Advanced voice typing features will be available once the language download is complete</string>
+    <string name="grid_gate_proofread_lang">Gboard doesn\'t support proofreading for one of the languages that you\'re using</string>
+    <string name="grid_gate_no_resize">Current keyboard does not support resizing</string>
+    <string name="grid_gate_writing_tools_text">Enter some text to use writing tools</string>
+    <string name="grid_gate_handwriting_app">The app doesn\'t support the handwriting gesture here</string>
+
+    <!-- ══════════ DISABLED / ERROR states (§2.3) ══════════ -->
+    <string name="grid_disabled_empty_editor">Disabled because empty editor</string>
+    <string name="grid_disabled_no_text_selected">Disabled because no text selected</string>
+    <string name="grid_disabled_items_selected">Disabled because items are selected.</string>
+    <string name="grid_disabled_opt_in">Disabled because opt-in is disabled</string>
+    <string name="grid_disabled_no_room">Disabled because there is no enough room for the dialog.</string>
+    <string name="grid_err_not_available_in_app">Command not available in this app</string>
+    <string name="grid_err_not_supported">Command not supported. Check the options.</string>
+    <string name="grid_err_tool_unavailable">Can\'t use this tool at the moment. Please try again later.</string>
+    <string name="grid_err_mic_in_use">Can\'t start. Microphone in use.</string>
+    <string name="grid_err_proofread_field">Can\'t proofread text in this field</string>
+    <string name="grid_err_offline_retry">Can\'t connect. Retry offline.</string>
+    <string name="grid_err_offline_tap_retry">Can\'t connect. Tap icon to retry.</string>
+    <string name="grid_err_network">Can\'t connect. Check your Wi-Fi or mobile network and try again.</string>
+    <string name="grid_err_google_unreachable">Can\'t reach Google right now</string>
+    <string name="grid_err_server">Can\'t connect to the server. Try again later.</string>
+    <string name="grid_err_generic">Something went wrong. Please try again.</string>
+    <string name="grid_err_process_results">Failed to process results</string>
+    <string name="grid_err_gifs">Failed to fetch GIFs.</string>
+    <string name="grid_err_lang_download">Failed to download this language</string>
+    <string name="grid_err_no_suggestions">Can\'t show suggestions for this. Please try something else.</string>
+
+    <!-- ══════════ PANEL headers / close labels (§2.1) ══════════ -->
+    <string name="panel_emoji_title">Emoji panel</string>
+    <string name="panel_emoji_close">Close the emoji panel</string>
+    <string name="panel_clipboard_title">Clipboard</string>
+    <string name="panel_clipboard_close">Hide clipboard</string>
+    <string name="panel_translate_title">Translate</string>
+    <string name="panel_translate_close">Hide translate</string>
+    <string name="panel_writing_tools_title">Writing Tools</string>
+    <string name="panel_writing_tools_close">Close Writing Tools</string>
+    <string name="panel_edit_title">Edit menu</string>
+    <string name="panel_edit_close">Close edit menu</string>
+    <string name="panel_more_expr_title">More expressions</string>
+    <string name="panel_more_expr_close">Close more expressions list</string>
+    <string name="panel_symbols_title">Symbols mode</string>
+    <string name="panel_symbols_close">Close the symbols panel</string>
+    <string name="panel_back_to_letter">Back to letter keyboard</string>
+    <string name="panel_back_to_previous">Back to previous state</string>
+
+    <!-- ══════════ Keyboard modes / exits (§2.2) ══════════ -->
+    <string name="mode_exit_floating">Exit floating keyboard</string>
+    <string name="mode_drag_exit_floating">Drag here to exit floating mode</string>
+    <string name="mode_exit_one_handed">Exit one-handed mode</string>
+    <string name="mode_switch_left_handed">Switch to left-handed keyboard</string>
+    <string name="mode_switch_right_handed">Switch to right-handed keyboard</string>
+    <string name="mode_switch_full_handwriting">Switch to full screen handwriting</string>
+    <string name="mode_switch_half_handwriting">Switch to half screen handwriting</string>
+    <string name="mode_finish_resize">Finish changing keyboard size and position</string>
+    <string name="mode_change_size_position">Change keyboard size or position</string>
+    <string name="mode_split_note">When the keyboard is set to split layout, some keys will be duplicated on both sides</string>
+
+    <!-- ══════════ Item labels (EN) ══════════ -->
+    <string name="item_clipboard">Clipboard</string>
+    <string name="item_translate">Translate</string>
+    <string name="item_emoji">Emoji</string>
+    <string name="item_gif">GIF</string>
+    <string name="item_sticker">Sticker</string>
+    <string name="item_settings">Settings</string>
+    <string name="item_theme">Theme</string>
+    <string name="item_voice_typing">Voice typing</string>
+    <string name="item_text_editing">Text editing</string>
+    <string name="item_one_handed">One-handed</string>
+    <string name="item_floating">Floating</string>
+    <string name="item_resize">Resize</string>
+    <string name="item_split">Split</string>
+    <string name="item_handwriting">Handwriting</string>
+    <string name="item_symbols">Symbols</string>
+    <string name="item_number_row">Number row</string>
+    <string name="item_morse">Morse code</string>
+    <string name="item_writing_tools">Writing Tools</string>
+    <string name="item_proofread">Proofread</string>
+    <string name="item_rewrite">Rewrite</string>
+    <string name="item_quick_insert">Quick Insert</string>
+    <string name="item_emoji_kitchen">Emoji Kitchen</string>
+    <string name="item_more_expressions">More expressions</string>
+    <string name="item_personal_dictionary">Personal dictionary</string>
+    <string name="item_undo">Undo</string>
+    <string name="item_redo">Redo</string>
+    <string name="item_scan_text">Scan text</string>
+    <string name="item_share">Share</string>
+</resources>
