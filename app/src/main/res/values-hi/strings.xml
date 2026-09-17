@@ -291,4 +291,29 @@
     <string name="voice_locked_horizontal">टूलबार क्षैतिज मोड में लॉक है</string>
     <string name="voice_pref_offline">उपलब्ध हो तो डिवाइस पर (ऑफ़लाइन) पहचान को प्राथमिकता दें</string>
     <string name="voice_pref_reset_position">टूलबार की स्थिति रीसेट करें</string>
+
+    <!-- ═══ toolbar-project (Gboard keyboard toolbar) — HI, APK verbatim ═══ -->
+    <string name="tb_show_toolbar">टाइप करते समय कीबोर्ड टूलबार दिखाएं</string>
+    <string name="tb_show_toolbar_while_typing">टाइप करते समय कीबोर्ड टूलबार दिखाएं</string>
+    <string name="tb_access_all_features">कीबोर्ड की सभी सुविधा यहां पाएं</string>
+    <string name="tb_show_suggestions">सुझाव दिखाएं और सुविधाओं तक पहुंचें</string>
+    <string name="tb_keyboard_toolbar">कीबोर्ड टूलबार</string>
+    <string name="tb_suggestion_strip">सुझाव पट्टी</string>
+    <string name="tb_emoji_panel">इमोजी वाला पैनल</string>
+    <string name="tb_open_emoji_panel">इमोजी वाला पैनल खोलें</string>
+    <string name="tb_close_emoji_panel">इमोजी वाला पैनल बंद करें</string>
+    <string name="tb_close_symbols_panel">सिंबल वाला पैनल बंद करें</string>
+    <string name="tb_features_menu">सुविधा मेन्यू</string>
+    <string name="tb_open_features_menu">सुविधा मेन्यू खोलें</string>
+    <string name="tb_close_features_menu">सुविधा मेन्यू बंद करें</string>
+    <string name="tb_more_keyboard_options">कीबोर्ड के ज़्यादा विकल्प</string>
+    <string name="tb_more_keyboard_options_opened">कीबोर्ड के ज़्यादा विकल्प खोले गए</string>
+    <string name="tb_more_keyboard_options_closed">कीबोर्ड के ज़्यादा विकल्प बंद किए गए</string>
+    <string name="tb_open_more_keyboard_options">कीबोर्ड के ज़्यादा विकल्पों की सूची खोलें</string>
+    <string name="tb_close_more_keyboard_options">कीबोर्ड के ज़्यादा विकल्पों की सूची बंद करें</string>
+    <string name="tb_customize_features_menu">सुविधा के मेन्यू अपनी पसंद के मुताबिक तैयार करें</string>
+    <string name="tb_show_writing_tools">लेखन टूल दिखाएं</string>
+    <string name="tb_close_writing_tools">लेखन टूल बंद करें</string>
+    <string name="tb_proofread_this_text">इस टेक्स्ट का प्रूफ़रीड करें</string>
+    <string name="tb_search_emoji">इमोजी खोजें</string>
 </resources>

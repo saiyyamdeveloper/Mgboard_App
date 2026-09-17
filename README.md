@@ -40,8 +40,17 @@ Developed by **[Saiyyam Ji (@saiyyamdeveloper)](https://github.com/saiyyamdevelo
 
 ### Keyboard chrome
 
-- **Toolbar / suggestion strip** with pinned access points (capacity 5 portrait /
-  6 landscape, valid range 3–8) plus undo-redo pills
+- **Keyboard toolbar (suggestion strip)** built on Gboard's own model —
+  **access points** (17 of them), capacity **5 portrait / 6 landscape** (valid range
+  3–8), semicolon order storage, and overflow into the **features menu**. Includes
+  undo/redo chips that appear *"when user edits existing text"* (Gboard's own rule) and
+  a one-time "Access all keyboard features here" education footer.
+- **Panels from the toolbar**: emoji/expression panel (5 tabs — Emoji · GIF · Stickers ·
+  Favorites · Recents — with search and 9 categories of emoji), symbols panel with
+  Gboard's exact **8 categories** (`Numbers · Brackets · Arrows · Mathematics · List ·
+  Shapes · Emoticons · Recent`, Numbers showing native Gondi digits), clipboard panel
+  with history, and an edit menu (select all / copy / cut / paste) driven by
+  `InputConnection`.
 - **⊞ Grid menu — "More features"**: 21 tiles (20 grid + fixed mic), 6 per page,
   drag-to-customize, semicolon order storage
 - **Honest gating (hide-nothing)**: features that need a backend or permission still
@@ -107,14 +116,14 @@ Or open the repo in Android Studio and press Run.
 ## 🧪 Tests
 
 ```bash
-./scripts/run_jvm_tests.sh      # engine, converter, layouts, shift, grid menu, voice — 533 assertions
+./scripts/run_jvm_tests.sh      # engine, converter, layouts, shift, grid menu, voice, toolbar — 679 assertions
 python3 scripts/check_parity.py # generated settings model vs web — 1055/1055
 ```
 
 The JVM suite runs **without the Android SDK** — the entire typing engine, layout model,
-converter, shift machine, grid-menu logic and the whole voice-toolbar state machine are
-pure Kotlin behind three small seams (`TextInput`, `SettingsSource`, `VoiceHost`), so
-they compile and run on a plain JVM.
+converter, shift machine, grid-menu logic, the whole voice-toolbar state machine and the
+toolbar/suggestion-strip model are pure Kotlin behind four small seams (`TextInput`,
+`SettingsSource`, `VoiceHost`, `EditorActions`), so they compile and run on a plain JVM.
 
 See [`docs/BUILD-AND-TEST.md`](docs/BUILD-AND-TEST.md).
 
@@ -160,7 +169,7 @@ The full research is in [`docs/research/`](docs/research/README.md):
 | [padding-project](docs/research/padding-project/) — gesture-nav safe-area gap | ✅ implemented & wired |
 | [grid-menu-project](docs/research/grid-menu-project/) — ⊞ "More features" | ✅ implemented |
 | [mgboard-setting-project](docs/research/mgboard-setting-project/) — settings tree | ✅ implemented (1055/1055) |
-| [toolbar-project](docs/research/toolbar-project/) — suggestion strip | 🟡 partial (strip live; Gboard's remaining strip behaviours pending) |
+| [toolbar-project](docs/research/toolbar-project/) — keyboard toolbar / suggestion strip | ✅ implemented (access points, capacity/overflow, panels) |
 | [voice-pill-project](docs/research/voice-pill-project/) — voice typing pill | ✅ implemented (IME-window widget, 5 states, drag-flip, persistence) |
 
 Parity details, including a web quirk that is deliberately **locked** rather than fixed:
@@ -194,10 +203,15 @@ Parity details, including a web quirk that is deliberately **locked** rather tha
 - [x] Typing engine port (Gondi / Hindi→Gondi / QWERTY) + undo + converter
 - [x] Settings tree with 1055-point parity
 - [x] Grid menu (21 tiles), themes, one-handed, height, symbols
+- [x] Keyboard toolbar: 17 access points, capacity/overflow rules, emoji + symbols +
+      clipboard + edit-menu panels
 - [x] Gesture-navigation padding (Gboard-exact, insets-based)
 - [x] Masaram Gondi font bundled
 - [ ] Real-device pass: composing-region behaviour across editors, foldables, landscape
 - [ ] Personal dictionary + clipboard manager wiring
 - [x] Voice toolbar (5 states, drag/dock/flip, persistence, on-device-preferred dictation)
 - [ ] Voice **commands** ("delete line", "go to settings", rephrase) — menu item currently gated honestly
-- [ ] Remaining toolbar behaviours from `toolbar-project` research
+- [ ] Word/next-word **suggestions** in the strip (needs a prediction model — currently
+      no chips, honestly gated)
+- [ ] GIF/Stickers content, Translate/Writing Tools/Proofread backends (menu items and
+      panels exist, gated with Gboard's verbatim reasons)

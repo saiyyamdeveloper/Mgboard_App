@@ -41,6 +41,7 @@ object AllTests {
         converterTests()
         LayoutTests.run()
         VoiceTests.run()
+        ToolbarTests.run()
         System.exit(T.report())
     }
 

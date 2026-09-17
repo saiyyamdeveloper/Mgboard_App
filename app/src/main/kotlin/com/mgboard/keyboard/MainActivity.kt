@@ -209,6 +209,34 @@ private fun LivePreview(theme: String, onThemeChange: (String) -> Unit) {
             }
         }
 
+        // ── toolbar-project: suggestion strip / panels ke controls ────────────────
+        Text("▤ Keyboard toolbar (suggestion strip)", fontSize = 12.sp,
+            fontWeight = FontWeight.SemiBold, modifier = Modifier.padding(top = 6.dp))
+        Row(horizontalArrangement = Arrangement.spacedBy(6.dp), modifier = Modifier.fillMaxWidth()) {
+            OutlinedButton(onClick = {
+                settings.toolbarVisible = !settings.toolbarVisible; refresh()
+            }) { Text(if (settings.toolbarVisible) "Toolbar ON" else "Toolbar OFF") }
+            OutlinedButton(onClick = {
+                val all = listOf(
+                    com.mgboard.keyboard.toolbar.ToolbarPanel.NONE,
+                    com.mgboard.keyboard.toolbar.ToolbarPanel.EMOJI,
+                    com.mgboard.keyboard.toolbar.ToolbarPanel.SYMBOLS,
+                    com.mgboard.keyboard.toolbar.ToolbarPanel.CLIPBOARD,
+                    com.mgboard.keyboard.toolbar.ToolbarPanel.EDIT_MENU,
+                    com.mgboard.keyboard.toolbar.ToolbarPanel.MORE_KEYBOARD_OPTIONS,
+                    com.mgboard.keyboard.toolbar.ToolbarPanel.TRANSLATE,
+                )
+                val next = all[(all.indexOf(model.toolbarPanel) + 1) % all.size]
+                if (next == com.mgboard.keyboard.toolbar.ToolbarPanel.NONE) model.closeToolbarPanel()
+                else model.openToolbarPanel(next)
+                refreshTick()
+            }) { Text("Panel: " + model.toolbarPanel.name.lowercase()) }
+            OutlinedButton(onClick = {
+                settings.addClipboardEntry("नमस्ते MgBoard"); settings.addClipboardEntry("𑴌𑴳𑴛")
+                model.openToolbarPanel(com.mgboard.keyboard.toolbar.ToolbarPanel.CLIPBOARD); refreshTick()
+            }) { Text("📋 Clipboard") }
+        }
+
         // ── voice toolbar (Gboard-style pill) ke controls ────────────────────────
         Text("🎙 Voice toolbar (Gboard-style pill)", fontSize = 12.sp,
             fontWeight = FontWeight.SemiBold, modifier = Modifier.padding(top = 6.dp))

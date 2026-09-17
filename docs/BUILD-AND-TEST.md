@@ -8,7 +8,7 @@ hain) aur **Gradle build** (Android Studio / local machine par).
 ## 1. Pure-logic JVM tests — `./scripts/run_jvm_tests.sh`
 
 Engine, converter, layouts, grid-menu, QWERTY shift, timings aur **poori voice-toolbar
-state machine** — sab plain JVM par compile + run hote hain. **533 assertions.**
+state machine** — sab plain JVM par compile + run hote hain. **679 assertions.**
 
 ```bash
 ./scripts/run_jvm_tests.sh          # kotlinc + java chahiye
@@ -43,6 +43,9 @@ Kya cover hota hai:
 | `VoiceWidgetTransitions` | §10.3 ka poora transition table — mic/chevron/⌨/badge/menu/symbols/dismiss + animation durations |
 | `VoiceWidgetController` | 5 states, mic pause-resume (pill band nahi hoti), auto-pause on menu, permission/unavailable gating, offline preference, insert-through-existing-pipeline, tooltip first-drag, persistence + restore, language list |
 | `StatusText` / `VoiceMenuItem` | Gboard APK se verbatim EN + HI strings ("अब बोलें", "रोकी गई", "वर्टिकल टूलबार पर स्विच करें") |
+| `AccessPoints` / `ToolbarPanel` | 17 access points ka inventory, verbatim labels + permission prompts, 11 panels ke `Open X`/`Close X` labels |
+| `SuggestionStrip` | capacity 3–8 clamp (5/6 default), semicolon order, overflow → features menu, right-side fixed access points, 14 Gboard config flags, undo/redo chips ka "existing text" rule |
+| `SymbolPanel*` | Gboard ki 8 categories (APK order), shapes/emoticons grids, expression panel ke 5 tabs + GIF/Stickers gating |
 
 ---
 

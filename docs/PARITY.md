@@ -142,11 +142,31 @@ Implementation: `ime/insets/GestureNavPaddingController.kt`
 
 Research + AOSP evidence: `docs/research/padding-project/`.
 
-### Toolbar
+### Toolbar (Gboard keyboard toolbar / suggestion strip) — implemented
 
-Web ke suggestion-strip rules aur Gboard ke access-point behaviour ka research
-`docs/research/toolbar-project/` mein hai. Android par toolbar pinned tiles dikhata
-hai (capacity upar wale rules se), undo/redo pills ke saath.
+Research: `docs/research/toolbar-project/RESEARCH.md` + `IMPLEMENTATION.md`.
+
+| Rule | Value | Evidence |
+|---|---|---|
+| Capacity | 5 portrait / 6 landscape, range **3–8** | *"By default, the suggestions strip shows a maximum of 5 (or 6 on landscape mode) access point icons. Valid value should between 3 and 8, inclusive"* |
+| Order | semicolon-separated | `access_points_showing_order` |
+| Overflow | capacity se bahar → **features menu** | *"More features opened/closed"* |
+| Access points | 17 (voice, emoji, clipboard, translate, writing tools, proofread, quick insert, symbols, theme, one-handed, settings, undo, redo, IME action, IME switch, ⊞ fixed, ⋮) | APK permission strings *"Allow <name> to access …"* |
+| ⊞ features menu | **fixed** — pin se nahi hat-ta | Gboard §0.2 |
+| Undo/Redo chips | sirf jab user **existing text** edit kar raha ho | *"The Undo and Redo chips appear in the suggestion strip via access point, when user edits existing text."* |
+| Flags | 14 Gboard config keys (naam ke naam se) | `show_toolbar`, `enable_ime_action_access_point`, … |
+| Flag OFF | access point strip se hat kar **features menu** mein rehta hai | *"Show a button on the keyboard toolbar to open emoji keyboard"* |
+| Expression panel tabs | `Emoji · GIF · Stickers · Favorites · Recents` | APK |
+| Symbols categories | `Numbers · Brackets · Arrows · Mathematics · List · Shapes · Emoticons · Recent` (8, exact) | APK §5.2 |
+| Panel labels | `Open X` / `Close X` + footer (*"Close the emoji panel"* / *"सिंबल वाला पैनल बंद करें"*) | APK §10.5 |
+| Popup menu families | features / more keyboard options (voice = voice-pill-project mein) | APK §4 |
+
+**Honest gating** (hide-nothing): word suggestions (prediction model chahiye), GIF /
+Stickers, Translate, Writing Tools, Proofread, Quick Insert — sab dikhte hain aur Gboard
+ka verbatim reason dete hain.
+
+**Laagu nahi hota:** PK toolbar (physical keyboard) aur Stylus toolbar — MgBoard mein
+yeh modes hain hi nahi.
 
 ### Voice toolbar (Gboard "Assistant voice typing toolbar") — implemented
 

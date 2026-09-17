@@ -1,5 +1,6 @@
 package com.mgboard.keyboard.ime
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.Rect
 import android.inputmethodservice.InputMethodService
@@ -16,6 +17,7 @@ import androidx.compose.ui.platform.ComposeView
 import com.mgboard.keyboard.SettingsActivity
 import com.mgboard.keyboard.engine.TypingEngine
 import com.mgboard.keyboard.prefs.SgPrefs
+import com.mgboard.keyboard.prefs.SgStore
 import com.mgboard.keyboard.ui.KeyboardScreen
 import com.mgboard.keyboard.ui.MgTheme
 import com.mgboard.keyboard.voice.DictationBridge
@@ -65,8 +67,15 @@ class MgBoardIme : InputMethodService(), KeyboardHost {
         prefs = SgPrefs(this)
         textInput = ImeTextInput { currentInputConnection }
         val engine = TypingEngine(textInput)
-        model = KeyboardModel(engine, PrefsSettingsSource(this, prefs) { openSettingsActivity() })
+        val settingsSource = PrefsSettingsSource(this, prefs) { openSettingsActivity() }
+        // NOTE: `editorActions` ek property initializer hai — construction ke waqt hi
+        // ban jaata hai, isliye onCreate() mein reference karna safe hai.
+        settingsSource.editorActions = editorActions
+        settingsSource.imePicker = { showSystemImePicker() }
+        model = KeyboardModel(engine, settingsSource)
         model.onChange = { tick++ }
+        // toolbar ka 🎤 access point → voice toolbar (voice-pill-project se wire)
+        model.voiceRequest = { onMicTap() }
 
         // ── voice toolbar (additive; keyboard pipeline untouched) ──────────────
         positionStore = WidgetPositionStore(this)
@@ -286,6 +295,87 @@ class MgBoardIme : InputMethodService(), KeyboardHost {
         }
         return if (prefs.getTheme() == "amoled") android.graphics.Color.BLACK
                else if (dark) 0xFF1C1B1F.toInt() else 0xFFFFFBFE.toInt()
+    }
+
+    // ══════════════ toolbar-project: editor actions (edit menu / IME action) ══════════════
+
+    /**
+     * Edit menu ke actions — sab `InputConnection` se, taaki kisi bhi editor mein chalein.
+     * Copy/cut par clip **clipboard history** mein bhi jaata hai (Gboard:
+     * `enable_clipboard_content_suggestion`).
+     */
+    private val editorActions = object : EditorActions {
+
+        override fun hasImeAction(): Boolean {
+            val opts = currentInputEditorInfo?.imeOptions ?: return false
+            return (opts and EditorInfo.IME_MASK_ACTION) != EditorInfo.IME_ACTION_UNSPECIFIED &&
+                (opts and EditorInfo.IME_MASK_ACTION) != EditorInfo.IME_ACTION_NONE
+        }
+
+        override fun isEditingExistingText(): Boolean {
+            val et = currentInputConnection?.getExtractedText(
+                android.view.inputmethod.ExtractedTextRequest(), 0) ?: return false
+            return (et.text?.isNotEmpty() == true)
+        }
+
+        override fun performImeAction() {
+            val opts = currentInputEditorInfo?.imeOptions ?: return
+            currentInputConnection?.performEditorAction(opts and EditorInfo.IME_MASK_ACTION)
+        }
+
+        override fun selectAll() {
+            val ic = currentInputConnection ?: return
+            val et = ic.getExtractedText(android.view.inputmethod.ExtractedTextRequest(), 0) ?: return
+            val len = et.text?.length ?: 0
+            ic.setSelection(0, len)
+        }
+
+        override fun copy() {
+            val selected = selectedText()
+            if (selected != null) {
+                copyToSystemClipboard(selected)
+                SgStore.addClipboard(this@MgBoardIme, selected)
+            }
+        }
+
+        override fun cut() {
+            val selected = selectedText()
+            if (selected != null) {
+                copyToSystemClipboard(selected)
+                SgStore.addClipboard(this@MgBoardIme, selected)
+                // selection replace = cut (composing region se safe)
+                currentInputConnection?.commitText("", 1)
+                syncFromEditor()
+            }
+        }
+
+        override fun paste() {
+            val cm = getSystemService(Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager
+            val text = cm.primaryClip?.takeIf { it.itemCount > 0 }?.getItemAt(0)?.text?.toString() ?: return
+            SgStore.addClipboard(this@MgBoardIme, text)
+            insertBulkText(text)
+        }
+
+        private fun selectedText(): String? {
+            val ic = currentInputConnection ?: return null
+            val et = ic.getExtractedText(android.view.inputmethod.ExtractedTextRequest(), 0) ?: return null
+            val a = et.selectionStart.coerceAtLeast(0)
+            val b = et.selectionEnd.coerceAtLeast(a)
+            if (a == b) return null
+            val full = et.text?.toString() ?: return null
+            return full.substring(minOf(a, full.length), minOf(b, full.length))
+        }
+    }
+
+    private fun copyToSystemClipboard(text: String) {
+        val cm = getSystemService(Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager
+        cm.setPrimaryClip(android.content.ClipData.newPlainText("MgBoard", text))
+    }
+
+    /** 🌐 access point — system ka IME picker (Gboard: `enable_ime_switch_access_point`). */
+    private fun showSystemImePicker() {
+        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as android.view.inputmethod.InputMethodManager
+        runCatching { imm.showInputMethodPicker() }
     }
 
     /** Voice/bulk text insert (Devanagari → Gondi conversion model karta hai). */

@@ -41,6 +41,44 @@ class KeyboardModel(
         val hapticEnabled: Boolean
         val pinnedIds: List<String>
         val uiHindi: Boolean
+        // ── toolbar-project: flags, order, panels, clipboard ─────────────────
+        /** Gboard ke APK config flags (research §2). */
+        val toolbarFlags: com.mgboard.keyboard.toolbar.ToolbarFlags
+            get() = com.mgboard.keyboard.toolbar.ToolbarFlags()
+
+        /** `access_points_showing_order` — toolbar ka semicolon order (null = default). */
+        val toolbarOrderRaw: String? get() = null
+
+        /** Clipboard history (Gboard: `enable_clipboard_content_suggestion`). */
+        fun clipboardHistory(): List<String> = emptyList()
+        fun addClipboardEntry(text: String) {}
+        fun removeClipboardEntry(text: String) {}
+
+        /** Symbols panel ka "Recent" (§5.2) aur expression panel ke Recents/Favorites (§5.1). */
+        fun recentSymbols(): List<String> = emptyList()
+        fun rememberRecentSymbol(sym: String) {}
+        fun recentEmoji(): List<String> = emptyList()
+        fun rememberRecentEmoji(e: String) {}
+        fun favoriteEmoji(): List<String> = emptyList()
+
+        /** Edit menu ke actions (§5.3) — real IME editor par chalata hai. */
+        fun editorSelectAll() {}
+        fun editorCopy() {}
+        fun editorCut() {}
+        fun editorPaste() {}
+
+        /** "Show the keyboard toolbar while typing" toggle. */
+        fun setToolbarVisible(v: Boolean) {}
+
+        /** IME action button (strip ke right side par) — editor action perform karo. */
+        fun performImeAction() {}
+        /** 🌐 IME switch access point. */
+        fun showImePicker() {}
+        /** Editor mein action button hai? (send/search/go/done) */
+        val hasImeAction: Boolean get() = true
+        /** Undo/redo chips: "when user edits existing text" */
+        val isEditingExistingText: Boolean get() = false
+
         fun setPinnedIds(ids: List<String>)
         /** off → right → left → off (web: cycleOneHanded). Naya mode return karta hai. */
         fun cycleOneHanded(): String
@@ -101,12 +139,210 @@ class KeyboardModel(
         return built
     }
 
-    /** Toolbar (suggestion strip) ke pinned access points. */
+    /**
+     * Toolbar (suggestion strip) ke pinned access points — grid-menu tiles.
+     * Purana path; naya [strip] Gboard ke access-point model se banta hai.
+     */
     fun toolbarTiles(): List<GridTile> {
         val cap = GridMenu.capacity(settings.landscape, settings.storedCapacity)
         val ids = settings.pinnedIds.take(cap)
         return ids.mapNotNull { GridMenu.byId(it) }
     }
+
+    // ══════════════════ toolbar-project (Gboard keyboard toolbar) ══════════════════
+
+    /**
+     * Abhi khula hua toolbar panel. Compose state isliye taaki panel khulte/band hote
+     * hi keyboard screen recompose ho (IME aur preview dono par same behaviour).
+     */
+    var toolbarPanel: com.mgboard.keyboard.toolbar.ToolbarPanel by mutableStateOf(
+        com.mgboard.keyboard.toolbar.ToolbarPanel.NONE
+    )
+        private set
+
+    fun openToolbarPanel(p: com.mgboard.keyboard.toolbar.ToolbarPanel) { toolbarPanel = p; bump() }
+
+    /** Suggestion strip ka content — capacity/order/overflow/chips sab Gboard rules se. */
+    fun strip(): com.mgboard.keyboard.toolbar.StripContent {
+        val cap = GridMenu.capacity(settings.landscape, settings.storedCapacity)
+        val order = com.mgboard.keyboard.toolbar.SuggestionStrip.parseOrderSemicolon(
+            settings.toolbarOrderRaw ?: com.mgboard.keyboard.toolbar.SuggestionStrip.DEFAULT_ORDER_SEMICOLON, cap)
+        return com.mgboard.keyboard.toolbar.SuggestionStrip.build(
+            pinnedIds = order,
+            capacity = cap,
+            flags = settings.toolbarFlags,
+            editingExistingText = settings.isEditingExistingText || engine.undo.canUndo || engine.undo.canRedo,
+            canUndo = engine.undo.canUndo,
+            canRedo = engine.undo.canRedo,
+            showImeAction = settings.hasImeAction,
+        )
+    }
+
+    /** Features menu (⊞) ka content: overflow access points + grid tiles. */
+    fun featuresMenu(): List<com.mgboard.keyboard.toolbar.AccessPoint> =
+        com.mgboard.keyboard.toolbar.SuggestionStrip.featuresMenu(strip().overflow, GridMenu.GRID_TILES)
+
+    /** Access point tap — panel kholo, action chalao, ya gated reason dikhao (hide-nothing). */
+    fun onAccessPoint(ap: com.mgboard.keyboard.toolbar.AccessPoint) {
+        if (ap.gated) {
+            settings.toast(ap.gateReason(settings.uiHindi) ?: "Command not available in this app")
+            return
+        }
+        ap.panel?.let { openToolbarPanel(it) }
+        when (ap.action) {
+            com.mgboard.keyboard.toolbar.ToolbarAction.VOICE -> voiceRequest?.invoke()
+            com.mgboard.keyboard.toolbar.ToolbarAction.UNDO -> { undoPillsVisible = true; engine.performUndo() }
+            com.mgboard.keyboard.toolbar.ToolbarAction.REDO -> { undoPillsVisible = true; engine.performRedo() }
+            com.mgboard.keyboard.toolbar.ToolbarAction.SETTINGS -> settings.onSettingsChanged()
+            com.mgboard.keyboard.toolbar.ToolbarAction.IME_ACTION -> settings.performImeAction()
+            com.mgboard.keyboard.toolbar.ToolbarAction.IME_SWITCH -> settings.showImePicker()
+            com.mgboard.keyboard.toolbar.ToolbarAction.FEATURES_MENU -> gridOpen = !gridOpen
+            com.mgboard.keyboard.toolbar.ToolbarAction.MORE_KEYBOARD_OPTIONS ->
+                openToolbarPanel(com.mgboard.keyboard.toolbar.ToolbarPanel.MORE_KEYBOARD_OPTIONS)
+            com.mgboard.keyboard.toolbar.ToolbarAction.ONE_HANDED -> onGridTile(GridMenu.byId("oneHanded") ?: return)
+            com.mgboard.keyboard.toolbar.ToolbarAction.THEME -> onGridTile(GridMenu.byId("theme") ?: return)
+            null -> {}
+        }
+        bump()
+    }
+
+    /** Panel band karo (Gboard: "Close X panel"). */
+    fun closeToolbarPanel() {
+        toolbarPanel = com.mgboard.keyboard.toolbar.ToolbarPanel.NONE
+        bump()
+    }
+
+    /**
+     * Voice access point → voice toolbar. IME isko apne `VoiceWidgetController` se
+     * wire karta hai; preview mein bhi wahi hota hai. `null` = wire nahi hua.
+     */
+    var voiceRequest: (() -> Unit)? = null
+
+    /** Emoji/symbol/clipboard pick → text insert (maujooda pipeline). */
+    fun insertFromPanel(text: String) {
+        engine.insertCharacter(text)
+        bump()
+    }
+
+    /** Clipboard panel se paste — text insert + history mein save. */
+    fun pasteFromClipboard(text: String) {
+        engine.insertCharacter(text)
+        settings.addClipboardEntry(text)
+        clipboardRevision++
+        bump()
+    }
+
+    fun removeClipboardEntry(text: String) {
+        settings.removeClipboardEntry(text)
+        clipboardRevision++
+        bump()
+    }
+
+    fun clearClipboardHistory() {
+        settings.clipboardHistory().forEach { settings.removeClipboardEntry(it) }
+        clipboardRevision++
+        bump()
+    }
+
+    /** Clipboard panel ko refresh karne wala counter (history plain prefs mein hai). */
+    var clipboardRevision: Int by mutableStateOf(0)
+        private set
+
+    // ── symbols panel (Gboard ki 8 categories, §5.2) ───────────────────────────
+
+    /**
+     * Symbols panel ka grid. Numbers category mein **Gondi digits** (U+11D50–U+11D59)
+     * aate hain — wahi jo keyboard ke numbers panel mein hain.
+     */
+    fun symbolsPanelGrid(
+        category: com.mgboard.keyboard.toolbar.SymbolPanelCategory
+    ): List<String> {
+        val gondiDigits = com.mgboard.keyboard.data.Numbers.ROWS[0].map { it.g }
+        return when (category) {
+            com.mgboard.keyboard.toolbar.SymbolPanelCategory.RECENT ->
+                settings.recentSymbols().ifEmpty { gondiDigits }
+            com.mgboard.keyboard.toolbar.SymbolPanelCategory.NUMBERS -> gondiDigits
+            com.mgboard.keyboard.toolbar.SymbolPanelCategory.BRACKETS -> com.mgboard.keyboard.voice.VoiceSymbols.BRACKETS
+            com.mgboard.keyboard.toolbar.SymbolPanelCategory.ARROWS -> com.mgboard.keyboard.voice.VoiceSymbols.ARROWS
+            com.mgboard.keyboard.toolbar.SymbolPanelCategory.MATHEMATICS -> com.mgboard.keyboard.voice.VoiceSymbols.MATHEMATICS
+            com.mgboard.keyboard.toolbar.SymbolPanelCategory.LIST -> com.mgboard.keyboard.voice.VoiceSymbols.LIST
+            com.mgboard.keyboard.toolbar.SymbolPanelCategory.SHAPES -> com.mgboard.keyboard.toolbar.SymbolPanelData.SHAPES
+            com.mgboard.keyboard.toolbar.SymbolPanelCategory.EMOTICONS -> com.mgboard.keyboard.toolbar.SymbolPanelData.EMOTICONS
+        }
+    }
+
+    /** Symbols panel ke "Recent" category mein symbol yaad karo. */
+    fun rememberRecentSymbol(sym: String) { settings.rememberRecentSymbol(sym) }
+
+    // ── expression panel: recents / favorites ──────────────────────────────────
+
+    fun recentEmoji(): List<String> = settings.recentEmoji()
+    fun favoriteEmoji(): List<String> = settings.favoriteEmoji()
+    fun rememberRecentEmoji(e: String) { settings.rememberRecentEmoji(e) }
+
+    // ── "More keyboard options" popup (§4) ─────────────────────────────────────
+
+    /**
+     * Gboard ka "More keyboard options" — keyboard-level toggles. Labels uske APK
+     * strings se (§8 settings list).
+     */
+    fun moreKeyboardOptions(): List<com.mgboard.keyboard.toolbar.ToolbarItem> {
+        val st = settings
+        return listOf(
+            com.mgboard.keyboard.toolbar.ToolbarItem(
+                id = "oneHanded", glyph = "🫱",
+                en = "One-handed mode", hi = "एक हाथ वाला मोड",
+                summaryEn = "Cycle: off → right → left", summaryHi = "बदलें: बंद → दायां → बायां",
+            ) { st.cycleOneHanded(); bump() },
+            com.mgboard.keyboard.toolbar.ToolbarItem(
+                id = "theme", glyph = "🎨", en = "Theme", hi = "थीम",
+                summaryEn = "Current: " + st.theme, summaryHi = "अभी: " + st.theme,
+            ) { st.toast("🎨 Theme: " + st.theme) },
+            com.mgboard.keyboard.toolbar.ToolbarItem(
+                id = "height", glyph = "↕", en = "Keyboard height", hi = "कीबोर्ड की ऊंचाई",
+                summaryEn = "Current: " + (st.heightRatio * 100).toInt() + "%",
+                summaryHi = "अभी: " + (st.heightRatio * 100).toInt() + "%",
+            ) { bump() },
+            com.mgboard.keyboard.toolbar.ToolbarItem(
+                id = "toolbar", glyph = "▤",
+                en = "Show the keyboard toolbar while typing",
+                hi = "टाइप करते समय कीबोर्ड टूलबार दिखाएं",
+            ) { st.setToolbarVisible(!st.toolbarVisible); bump() },
+            com.mgboard.keyboard.toolbar.ToolbarItem(
+                id = "editMenu", glyph = "✂", en = "Open edit menu", hi = "एडिट मेन्यू खोलें",
+            ) { openToolbarPanel(com.mgboard.keyboard.toolbar.ToolbarPanel.EDIT_MENU) },
+            com.mgboard.keyboard.toolbar.ToolbarItem(
+                id = "selectMode", glyph = "▣", en = "Enter select mode", hi = "चयन मोड में जाएं",
+            ) { openToolbarPanel(com.mgboard.keyboard.toolbar.ToolbarPanel.SELECT_MODE) },
+            com.mgboard.keyboard.toolbar.ToolbarItem(
+                id = "settings", glyph = "⚙", en = "Settings", hi = "सेटिंग",
+            ) { st.onSettingsChanged() },
+        )
+    }
+
+    /** Edit menu (§5.3) — select all / copy / cut / paste. */
+    fun editMenuItems(): List<com.mgboard.keyboard.toolbar.ToolbarItem> = listOf(
+        com.mgboard.keyboard.toolbar.ToolbarItem(
+            id = "selectAll", glyph = "🅰", en = "Select all", hi = "सभी चुनें",
+        ) { settings.editorSelectAll(); bump() },
+        com.mgboard.keyboard.toolbar.ToolbarItem(
+            id = "copy", glyph = "⧉", en = "Copy", hi = "कॉपी करें",
+        ) { settings.editorCopy(); clipboardRevision++; bump() },
+        com.mgboard.keyboard.toolbar.ToolbarItem(
+            id = "cut", glyph = "✂", en = "Cut", hi = "काटें",
+        ) { settings.editorCut(); clipboardRevision++; bump() },
+        com.mgboard.keyboard.toolbar.ToolbarItem(
+            id = "paste", glyph = "📋", en = "Paste", hi = "चिपकाएं",
+        ) { settings.editorPaste(); bump() },
+    )
+
+    // ── access-point education footer (Gboard flag) ────────────────────────────
+
+    /** *"Access all keyboard features here"* — ek baar dikhne wala hint. */
+    var showEducationFooter: Boolean = true
+        private set
+
+    fun dismissEducationFooter() { showEducationFooter = false; bump() }
 
     fun gridTiles(): List<GridTile> = GridMenu.GRID_TILES
 

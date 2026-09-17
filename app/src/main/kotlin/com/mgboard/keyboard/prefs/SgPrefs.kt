@@ -140,6 +140,8 @@ class SgPrefs(context: Context) {
         const val KEY_HAPTIC      = "mg_haptic_enabled"
 
         const val KEY_THEME       = "mg_theme"            // web: applyTheme(dark/light/amoled)
+        /** "Show the keyboard toolbar while typing" (toolbar-project). */
+        const val KEY_TOOLBAR     = "sg_toolbar"
 
         // ── Android-specific UI key ──
         const val KEY_LANG        = "mg_settings_lang"

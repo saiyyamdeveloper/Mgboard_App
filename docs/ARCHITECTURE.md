@@ -22,6 +22,7 @@ Ek hi typing engine, do shells (web demo + Android IME). Android app ka poora lo
 │                                                                     │
 │  KeyboardModel ── TypingEngine ── UndoStack                         │
 │  VoiceWidgetController ── WidgetDrag ── VoiceWidgetTransitions      │
+│  SuggestionStrip ── AccessPoints ── ToolbarFlags ── ToolbarPanel     │
 │       │               │                                             │
 │       │               ├── TextInput (interface)                     │
 │       │               └── DevToGondi (voice/bulk converter)         │
@@ -46,6 +47,7 @@ Ek hi typing engine, do shells (web demo + Android IME). Android app ka poora lo
 | `gridmenu/` | 976 | Gboard-exact grid-menu controller/customizer/panel-host | `docs/research/grid-menu-project/` |
 | `model/` | 1102 | Gboard Settings ka poora tree (labels, summaries, search keywords) | **generated** by `scripts/gen_settings_model.py`, verified by `check_parity.py` |
 | `prefs/` | 206 | SharedPreferences wrapper — keys web ke localStorage keys ke same | web `sg*` functions |
+| `toolbar/` | ~330 | Gboard keyboard toolbar model — access points, flags, suggestion-strip build (capacity/order/overflow/chips), panel enums, symbols categories | `docs/research/toolbar-project/` |
 | `voice/` | ~1200 | Gboard-style voice toolbar — 5 states, drag/flip/dock, persistence, dictation bridge, Compose UI | `docs/research/voice-pill-project/` |
 | `ui/` | 1173 | Compose keyboard, themes, popups, settings screen, in-app preview | web CSS/JS render + `mgboard-setting-project` |
 
@@ -68,6 +70,16 @@ Ek hi typing engine, do shells (web demo + Android IME). Android app ka poora lo
    (`"\u11D0C"` galat parse hota hai).
 6. **Padding system insets se.** Gesture-navigation gap ke liye koi fixed px value
    nahi — `WindowInsets` (details: `docs/research/padding-project/`).
+
+## Toolbar Gboard ke apne model par bana hai
+
+`toolbar/` package Gboard ki vocabulary use karta hai: **access points** (icons),
+**suggestion strip** (toolbar), **features menu** (overflow). Capacity/order/overflow ke
+rules grid-menu-project ke shared hain (Gboard ka ek hi rule dono jagah): 5 portrait /
+6 landscape, range 3–8, semicolon order, jo fit na ho → features menu.
+
+Flag OFF hone par access point strip se hat kar **features menu mein chala jaata hai** —
+feature chhupta nahi (hide-nothing).
 
 ## Voice toolbar ek additive module hai
 
@@ -98,4 +110,5 @@ Isse preview aur real keyboard ka behaviour drift nahi kar sakta.
 | `KeyboardModel.SettingsSource` | prefs/Android ko model se alag → JVM tests + preview |
 | `QwertyShift.onShiftTap(now)` | clock inject → double-tap window testable |
 | `VoiceHost` interface | voice toolbar ko Android (mic/IME/prefs) se alag karta hai → poori state machine JVM par test hoti hai |
+| `EditorActions` interface | edit-menu/IME-action ko `InputConnection` se alag karta hai → toolbar model JVM par test hota hai |
 | `// android-only:` marker | runner ko batata hai kaun si file JVM par compile nahi ho sakti |

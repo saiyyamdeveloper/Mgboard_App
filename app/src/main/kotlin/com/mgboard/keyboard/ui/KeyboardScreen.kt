@@ -114,16 +114,26 @@ fun KeyboardScreen(
 
     Box(Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.surface)) {
         Column(Modifier.fillMaxWidth()) {
-            if (settings.toolbarVisible) ToolbarStrip(model, host)
+            // toolbar-project: Gboard-style keyboard toolbar (access points + chips)
+            if (settings.toolbarFlags.showToolbar && settings.toolbarVisible) {
+                KeyboardToolbar(model = model, host = host)
+            }
 
-            Row(Modifier.fillMaxWidth().height(keyboardHeight)) {
-                if (oneHanded == "right") DockArea(model, dockWeight)
-                Column(Modifier.weight(1f).fillMaxHeight().padding(vertical = 2.dp)) {
-                    rows.forEachIndexed { ri, row ->
-                        KeyRow(model, host, row, ri, Modifier.weight(1f))
-                    }
+            // panel khula ho to keyboard body uski jagah panel dikhata hai (Gboard)
+            if (model.toolbarPanel != com.mgboard.keyboard.toolbar.ToolbarPanel.NONE) {
+                Box(Modifier.fillMaxWidth().height(keyboardHeight)) {
+                    ToolbarPanelHost(model = model, host = host)
                 }
-                if (oneHanded == "left") DockArea(model, dockWeight)
+            } else {
+                Row(Modifier.fillMaxWidth().height(keyboardHeight)) {
+                    if (oneHanded == "right") DockArea(model, dockWeight)
+                    Column(Modifier.weight(1f).fillMaxHeight().padding(vertical = 2.dp)) {
+                        rows.forEachIndexed { ri, row ->
+                            KeyRow(model, host, row, ri, Modifier.weight(1f))
+                        }
+                    }
+                    if (oneHanded == "left") DockArea(model, dockWeight)
+                }
             }
 
             if (oneHanded.isNotEmpty()) OneHandedBar(model)
@@ -136,56 +146,6 @@ fun KeyboardScreen(
 
         // voice toolbar (additive layer) — 5 states: panel, pills, menu, symbols
         if (voice != null) com.mgboard.keyboard.voice.VoiceWidgetLayer(controller = voice, tick = tick)
-    }
-}
-
-// ══════════════════════════ toolbar / suggestion strip ══════════════════════════
-
-@Composable
-private fun ToolbarStrip(model: KeyboardModel, host: KeyboardHost) {
-    val tiles = remember(model.rev) { model.toolbarTiles() }
-    Row(
-        Modifier.fillMaxWidth().height(40.dp)
-            .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
-            .padding(horizontal = 4.dp),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        if (model.undoPillsVisible) {
-            Pill("↶", enabled = model.engine.undo.canUndo) { model.engine.performUndo(); model.bump() }
-            Pill("↷", enabled = model.engine.undo.canRedo) { model.engine.performRedo(); model.bump() }
-            Spacer(Modifier.weight(1f))
-        } else {
-            tiles.forEach { t ->
-                Pill(GridIcons.of(t.id), enabled = t.enabled, label = model.label(t)) { model.onGridTile(t) }
-            }
-            Spacer(Modifier.weight(1f))
-        }
-        // 🎤 = voice toolbar ka access point (Gboard: mic "featuring Google's colors
-        // to the right"). Voice module additive hai — keyboard pipeline wahi hai.
-        Pill("🎤", enabled = true) { host.onMicTap() }
-        // grid icon FIXED hota hai (Gboard §0.2: removable = false)
-        Pill("⊞", enabled = true, label = model.moreLabel()) { model.toggleGrid() }
-    }
-}
-
-@Composable
-private fun Pill(glyph: String, enabled: Boolean, label: String? = null, onClick: () -> Unit) {
-    Box(
-        Modifier.padding(horizontal = 3.dp).size(34.dp)
-            .clip(RoundedCornerShape(8.dp))
-            .clickable { onClick() }
-            .background(
-                if (enabled) MaterialTheme.colorScheme.surface
-                else MaterialTheme.colorScheme.surfaceVariant
-            ),
-        contentAlignment = Alignment.Center,
-    ) {
-        Text(
-            text = if (enabled) glyph else "⊘",
-            fontFamily = MgondiFont,
-            fontSize = 15.sp,
-            color = if (enabled) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.outline,
-        )
     }
 }
 

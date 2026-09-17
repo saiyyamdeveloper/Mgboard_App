@@ -1,3 +1,7 @@
+> **Status: ✅ IMPLEMENTED** — yeh research ab Mgboard app mein lagu ho chuki hai.
+> Code: `app/src/main/kotlin/com/mgboard/keyboard/toolbar/` + `ui/KeyboardToolbar.kt` +
+> `ui/ToolbarPanels.kt`. Kya-kya bana aur kya honestly gated hai: **`IMPLEMENTATION.md`**.
+
 # Toolbar Deep Research — Gboard 18.3.1.977415014-beta (real APK evidence)
 
 > **Yeh "save-only" research hai** — jaise `padding-project` aur `voice-pill-project` ke liye kiya gaya.

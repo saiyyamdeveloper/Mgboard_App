@@ -64,6 +64,38 @@ class PreviewSettingsSource(
     override var pinnedIds: List<String> = DEFAULT_PINNED
     override var uiHindi: Boolean = false
 
+    // ── toolbar-project ────────────────────────────────────────────────────────
+    override val toolbarFlags = com.mgboard.keyboard.toolbar.ToolbarFlags()
+    override val toolbarOrderRaw: String? = null
+    override val hasImeAction: Boolean = true
+    override val isEditingExistingText: Boolean = false
+
+    private val clips = mutableListOf<String>()
+    private val recents = mutableListOf<String>()
+    private val recentEmojis = mutableListOf<String>()
+    private val favorites = mutableListOf<String>()
+
+    override fun clipboardHistory(): List<String> = clips.toList()
+    override fun addClipboardEntry(text: String) {
+        clips.remove(text); clips.add(0, text)
+        while (clips.size > 50) clips.removeAt(clips.size - 1)
+    }
+    override fun removeClipboardEntry(text: String) { clips.remove(text) }
+
+    override fun recentSymbols(): List<String> = recents.toList()
+    override fun rememberRecentSymbol(sym: String) { recents.remove(sym); recents.add(0, sym) }
+    override fun recentEmoji(): List<String> = recentEmojis.toList()
+    override fun rememberRecentEmoji(e: String) { recentEmojis.remove(e); recentEmojis.add(0, e) }
+    override fun favoriteEmoji(): List<String> = favorites.toList()
+
+    override fun performImeAction() = onToast("IME action (preview)")
+    override fun showImePicker() = onToast("System keyboard picker (device par chalta hai)")
+    override fun editorSelectAll() = onToast("Select all (preview)")
+    override fun editorCopy() = onToast("Copy (preview)")
+    override fun editorCut() = onToast("Cut (preview)")
+    override fun editorPaste() = onToast("Paste (preview)")
+    override fun setToolbarVisible(v: Boolean) { toolbarVisible = v }
+
     override fun setPinnedIds(ids: List<String>) { pinnedIds = ids }
 
     override fun cycleOneHanded(): String {
