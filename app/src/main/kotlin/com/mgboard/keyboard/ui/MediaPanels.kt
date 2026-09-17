@@ -107,7 +107,7 @@ fun KlipyMediaPanel(model: KeyboardModel, kind: KlipyApi.Kind) {
 
             failed || page == null -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text("⊘", fontSize = 22.sp, color = MaterialTheme.colorScheme.outline)
+                    MgIcon("blocked", size = 22.dp, tint = MaterialTheme.colorScheme.outline)
                     Text(
                         text = MediaAvailability.Offline.reason(hindi)!!,
                         fontSize = 11.sp, textAlign = TextAlign.Center,
@@ -314,9 +314,8 @@ private fun MediaCell(model: KeyboardModel, item: MediaItem, hindi: Boolean, kin
         )
         // Clips par play indicator (video hai, preview animated thumbnail hai)
         if (kind == KlipyApi.Kind.CLIPS) {
-            Text(
-                "▶", fontSize = 18.sp, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.85f),
-            )
+            MgIcon("play", size = 20.dp,
+                tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.85f))
         }
     }
 }
@@ -326,7 +325,7 @@ private fun MediaCell(model: KeyboardModel, item: MediaItem, hindi: Boolean, kin
 private fun GifSetupHint(hindi: Boolean) {
     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text("🔑", fontSize = 22.sp)
+            MgIcon("key", size = 22.dp)
             Text(
                 text = MediaAvailability.NoApiKey.reason(hindi)!!,
                 fontSize = 11.sp, textAlign = TextAlign.Center,
@@ -335,9 +334,9 @@ private fun GifSetupHint(hindi: Boolean) {
             )
             Text(
                 text = if (hindi)
-                    "Key: partner.klipy.com → API Keys (free). Phir app mein: 🔑 Klipy API key button se paste karein, ya local.properties mein KLIPY_APP_KEY= likh kar rebuild karein."
+                    "Key: partner.klipy.com → API Keys (free). Phir app mein: "Klipy key" button se paste karein, ya local.properties mein KLIPY_APP_KEY= likh kar rebuild karein."
                 else
-                    "Get a free key at partner.klipy.com → API Keys. Then paste in-app via the 🔑 Klipy API key button, or set KLIPY_APP_KEY in local.properties and rebuild.",
+                    "Get a free key at partner.klipy.com → API Keys. Then paste in-app via the "Klipy key" button, or set KLIPY_APP_KEY in local.properties and rebuild.",
                 fontSize = 9.sp, textAlign = TextAlign.Center,
                 color = MaterialTheme.colorScheme.outline,
                 modifier = Modifier.padding(horizontal = 20.dp),

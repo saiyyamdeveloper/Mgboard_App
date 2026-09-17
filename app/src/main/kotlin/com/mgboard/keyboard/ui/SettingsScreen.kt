@@ -158,7 +158,7 @@ private fun HomeGrid(t: SgText, scroll: androidx.compose.foundation.ScrollState,
                         ),
                     ) {
                         Column(Modifier.padding(12.dp)) {
-                            Text(p.icon, fontSize = 22.sp)
+                            MgIcon(p.icon, size = 22.dp, tint = mgIconTint())
                             Spacer(Modifier.height(6.dp))
                             Text(t.page(p), fontWeight = FontWeight.SemiBold, fontSize = 15.sp,
                                 maxLines = 1)
@@ -268,7 +268,7 @@ private fun ItemRow(
             Text(
                 text = when {
                     gated -> "⊘"
-                    it.type == SgType.SLIDER -> "🎚"
+                    it.type == SgType.SLIDER -> "↕"
                     it.type == SgType.ACTION -> "▶"
                     it.type == SgType.INFO -> "ℹ"
                     else -> "•"
@@ -293,12 +293,18 @@ private fun ItemRow(
             if (showPageChip) {
                 val p = SgPages.byId(it.page)
                 if (p != null && onOpenPage != null) {
-                    Text(
-                        text = "${p.icon} ${t.page(p)}",
-                        fontSize = 11.sp,
-                        color = MaterialTheme.colorScheme.primary,
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier.padding(top = 4.dp).clickable { onOpenPage(p.id) },
-                    )
+                    ) {
+                        MgIcon(p.icon, size = 13.dp, tint = MaterialTheme.colorScheme.primary)
+                        Spacer(Modifier.width(4.dp))
+                        Text(
+                            text = t.page(p),
+                            fontSize = 11.sp,
+                            color = MaterialTheme.colorScheme.primary,
+                        )
+                    }
                 }
             }
             if (it.type == SgType.INFO) {

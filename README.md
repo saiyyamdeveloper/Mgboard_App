@@ -38,6 +38,12 @@ Developed by **[Saiyyam Ji (@saiyyamdeveloper)](https://github.com/saiyyamdevelo
 
 ### Keyboard chrome
 
+- **Monochrome Gboard-style icons everywhere** — the whole UI (toolbar access points,
+  features/edit menus, keyboard keys, settings pages, voice pill, media & translate
+  panels) draws plain vector icons from `ui/MgIcons.kt` (24×24 viewport, ~2dp stroke,
+  round caps) tinted per theme: **white on dark themes, Gboard gray `#5F6368` on
+  light** — exactly how Gboard tints its icon set. No colored emoji in chrome; emoji/
+  sticker/GIF panel *content* stays colorful because that is content, not icons.
 - **Keyboard toolbar (suggestion strip)** built on Gboard's own model —
   **access points** (17 of them), capacity **5 portrait / 6 landscape** (valid range
   3–8), semicolon order storage, and overflow into the **features menu**. Includes

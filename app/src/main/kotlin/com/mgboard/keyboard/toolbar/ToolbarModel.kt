@@ -104,18 +104,18 @@ enum class ToolbarAction {
 object AccessPoints {
 
     val VOICE = AccessPoint(
-        id = "voice", glyph = "🎤",
+        id = "voice", glyph = "◉",
         en = "Voice Typing", hi = "बोली को लिखाई में बदलने की आसान सुविधा",
         action = ToolbarAction.VOICE, fixed = true,
     )
 
     val EMOJI = AccessPoint(
-        id = "emoji", glyph = "🙂", en = "Emoji", hi = "इमोजी",
+        id = "emoji", glyph = "☺", en = "Emoji", hi = "इमोजी",
         panel = ToolbarPanel.EMOJI,
     )
 
     val CLIPBOARD = AccessPoint(
-        id = "clipboard", glyph = "📋", en = "Clipboard", hi = "क्लिपबोर्ड",
+        id = "clipboard", glyph = "⎘", en = "Clipboard", hi = "क्लिपबोर्ड",
         panel = ToolbarPanel.CLIPBOARD,
     )
 
@@ -127,13 +127,13 @@ object AccessPoints {
      * Gboard ke UI rules: source picker / ⇄ swap / target picker / ✓ insert.
      */
     val TRANSLATE = AccessPoint(
-        id = "translate", glyph = "🗣", en = "Translate", hi = "अनुवाद",
+        id = "translate", glyph = "अ", en = "Translate", hi = "अनुवाद",
         panel = ToolbarPanel.TRANSLATE,
         action = ToolbarAction.TRANSLATE,
     )
 
     val WRITING_TOOLS = AccessPoint(
-        id = "writingTools", glyph = "✍", en = "Writing Tools", hi = "लेखन टूल",
+        id = "writingTools", glyph = "✒", en = "Writing Tools", hi = "लेखन टूल",
         panel = ToolbarPanel.WRITING_TOOLS,
         gated = true,
         gateReasonEn = "Can't use this tool at the moment. Please try again later.",
@@ -149,7 +149,7 @@ object AccessPoints {
     )
 
     val QUICK_INSERT = AccessPoint(
-        id = "quickInsert", glyph = "⚡", en = "Quick Insert", hi = "क्विक इंसर्ट",
+        id = "quickInsert", glyph = "+", en = "Quick Insert", hi = "क्विक इंसर्ट",
         gated = true,
         gateReasonEn = "Disabled because opt-in is disabled",
         gateReasonHi = "ऑप्ट-इन बंद होने की वजह से अक्षम",
@@ -161,17 +161,17 @@ object AccessPoints {
     )
 
     val THEME = AccessPoint(
-        id = "theme", glyph = "🎨", en = "Theme", hi = "थीम",
+        id = "theme", glyph = "◐", en = "Theme", hi = "थीम",
         action = ToolbarAction.THEME,
     )
 
     val SYMBOLS = AccessPoint(
-        id = "symbols", glyph = "🔣", en = "Symbols", hi = "चिह्न",
+        id = "symbols", glyph = "?123", en = "Symbols", hi = "चिह्न",
         panel = ToolbarPanel.SYMBOLS,
     )
 
     val ONE_HANDED = AccessPoint(
-        id = "oneHanded", glyph = "🫱", en = "One-handed mode", hi = "एक हाथ वाला मोड",
+        id = "oneHanded", glyph = "◧", en = "One-handed mode", hi = "एक हाथ वाला मोड",
         action = ToolbarAction.ONE_HANDED,
     )
 

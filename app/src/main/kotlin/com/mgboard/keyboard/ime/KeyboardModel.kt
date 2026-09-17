@@ -419,14 +419,14 @@ class KeyboardModel(
         val st = settings
         return listOf(
             com.mgboard.keyboard.toolbar.ToolbarItem(
-                id = "oneHanded", glyph = "🫱",
+                id = "oneHanded", glyph = "◧",
                 en = "One-handed mode", hi = "एक हाथ वाला मोड",
                 summaryEn = "Cycle: off → right → left", summaryHi = "बदलें: बंद → दायां → बायां",
             ) { st.cycleOneHanded(); bump() },
             com.mgboard.keyboard.toolbar.ToolbarItem(
-                id = "theme", glyph = "🎨", en = "Theme", hi = "थीम",
+                id = "theme", glyph = "◐", en = "Theme", hi = "थीम",
                 summaryEn = "Current: " + st.theme, summaryHi = "अभी: " + st.theme,
-            ) { st.toast("🎨 Theme: " + st.theme) },
+            ) { st.toast((if (st.uiHindi) "थीम: " else "Theme: ") + st.theme) },
             com.mgboard.keyboard.toolbar.ToolbarItem(
                 id = "height", glyph = "↕", en = "Keyboard height", hi = "कीबोर्ड की ऊंचाई",
                 summaryEn = "Current: " + (st.heightRatio * 100).toInt() + "%",
@@ -452,7 +452,7 @@ class KeyboardModel(
     /** Edit menu (§5.3) — select all / copy / cut / paste. */
     fun editMenuItems(): List<com.mgboard.keyboard.toolbar.ToolbarItem> = listOf(
         com.mgboard.keyboard.toolbar.ToolbarItem(
-            id = "selectAll", glyph = "🅰", en = "Select all", hi = "सभी चुनें",
+            id = "selectAll", glyph = "I", en = "Select all", hi = "सभी चुनें",
         ) { settings.editorSelectAll(); bump() },
         com.mgboard.keyboard.toolbar.ToolbarItem(
             id = "copy", glyph = "⧉", en = "Copy", hi = "कॉपी करें",
@@ -461,7 +461,7 @@ class KeyboardModel(
             id = "cut", glyph = "✂", en = "Cut", hi = "काटें",
         ) { settings.editorCut(); clipboardRevision++; bump() },
         com.mgboard.keyboard.toolbar.ToolbarItem(
-            id = "paste", glyph = "📋", en = "Paste", hi = "चिपकाएं",
+            id = "paste", glyph = "⎘", en = "Paste", hi = "चिपकाएं",
         ) { settings.editorPaste(); bump() },
     )
 
@@ -492,7 +492,7 @@ class KeyboardModel(
                 if (translateMode) appendTranslateText(" ") else engine.onSpace()
             KeyKind.PERIOD -> engine.insertCharacter(spec.glyph)
             KeyKind.TOGGLE_123 -> engine.onTogglePanel()
-            KeyKind.EMOJI -> settings.toast("🙂 Emoji panel — web app mein available")
+            KeyKind.EMOJI -> openToolbarPanel(com.mgboard.keyboard.toolbar.ToolbarPanel.EMOJI)
             KeyKind.GLOBE -> onGlobe()
             KeyKind.SHIFT -> { shift.onShiftTap(); syncShift(); bump() }
             KeyKind.SYMBOL_PAGE -> engine.selectNumPage(engine.numPage % KeyboardLayout.NUM_PAGES + 1)
@@ -521,7 +521,7 @@ class KeyboardModel(
 
     private fun onGlobe() {
         val mode = engine.onGlobeTap()
-        settings.toast("🌐 " + mode.displayName)
+        settings.toast(mode.displayName)
         shift.reset()
     }
 
@@ -530,7 +530,7 @@ class KeyboardModel(
         when {
             spec.longPressMulti.isNotEmpty() -> { popupMulti = spec.longPressMulti; bump() }
             spec.longPress != null -> { popupChar = spec.longPress; bump() }
-            spec.kind == KeyKind.GLOBE -> settings.toast("🌐 Keyboard switcher: Gondi ↔ English ↔ Hindi")
+            spec.kind == KeyKind.GLOBE -> settings.toast("Keyboard switcher: Gondi ↔ English ↔ Hindi")
             else -> {}
         }
     }
@@ -575,20 +575,20 @@ class KeyboardModel(
             "symbols" -> {
                 val toSymbols = engine.panel != Panel.NUMBERS
                 engine.onTogglePanel()
-                settings.toast(if (toSymbols) "🔣 Symbols mode" else "🔤 Back to letter keyboard")
+                settings.toast(if (toSymbols) (if (settings.uiHindi) "चिह्न मोड" else "Symbols mode") else (if (settings.uiHindi) "अक्षर कीबोर्ड" else "Back to letter keyboard"))
             }
             "settings" -> settings.onSettingsChanged()
             "oneHanded" -> {
                 val next = settings.cycleOneHanded()
                 settings.toast(
                     when (next) {
-                        "right" -> "🫱 Switched to right-handed keyboard"
-                        "left" -> "🫲 Switched to left-handed keyboard"
+                        "right" -> "Switched to right-handed keyboard"
+                        "left" -> "Switched to left-handed keyboard"
                         else -> "↩️ Exit one-handed mode"
                     }
                 )
             }
-            "theme" -> settings.toast("🎨 Theme: " + settings.theme)
+            "theme" -> settings.toast((if (settings.uiHindi) "थीम: " else "Theme: ") + settings.theme)
             else -> settings.toast(tile.label)
         }
         bump()

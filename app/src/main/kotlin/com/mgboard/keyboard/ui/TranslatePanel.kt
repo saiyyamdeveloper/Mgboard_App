@@ -99,7 +99,7 @@ fun TranslatePanel(model: KeyboardModel) {
                 contentAlignment = Alignment.Center,
             ) {
                 // Gboard: beech ka icon dono languages interchange karta hai
-                Text("⇄", fontSize = 15.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                MgIcon("swap", size = 16.dp, tint = MaterialTheme.colorScheme.onSurfaceVariant)
             }
 
             LangPicker(
@@ -180,8 +180,9 @@ fun TranslatePanel(model: KeyboardModel) {
                 s.phase == TranslatePhase.ERROR && s.error != null -> Column(
                     Modifier.fillMaxWidth(), verticalArrangement = Arrangement.Center,
                 ) {
-                    Text("⊘", fontSize = 20.sp, color = MaterialTheme.colorScheme.outline,
-                        textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth())
+                    Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                        MgIcon("blocked", size = 22.dp, tint = MaterialTheme.colorScheme.outline)
+                    }
                     Text(
                         text = s.error!!.label(hindi),
                         fontSize = 11.sp, textAlign = TextAlign.Center,
@@ -241,12 +242,15 @@ fun TranslatePanel(model: KeyboardModel) {
 
         // ── footer: privacy badge + ✓ insert ──────────────────────────────────
         Row(Modifier.fillMaxWidth().padding(top = 6.dp), verticalAlignment = Alignment.CenterVertically) {
-            Text(
-                text = if (hindi) "🔒 डिवाइस पर · टेक्स्ट बाहर नहीं जाता"
-                       else "🔒 On-device · text never leaves this device",
-                fontSize = 9.sp, color = MaterialTheme.colorScheme.outline,
-                modifier = Modifier.weight(1f),
-            )
+            Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.weight(1f)) {
+                MgIcon("lock", size = 11.dp, tint = MaterialTheme.colorScheme.outline)
+                Spacer(Modifier.width(3.dp))
+                Text(
+                    text = if (hindi) "डिवाइस पर · टेक्स्ट बाहर नहीं जाता"
+                           else "On-device · text never leaves this device",
+                    fontSize = 9.sp, color = MaterialTheme.colorScheme.outline,
+                )
+            }
             Box(
                 Modifier.size(32.dp).clip(CircleShape)
                     .background(
@@ -256,10 +260,10 @@ fun TranslatePanel(model: KeyboardModel) {
                     .clickable(enabled = s.output.isNotEmpty()) { ctrl.insertOutput() },
                 contentAlignment = Alignment.Center,
             ) {
-                Text(
-                    "✓", fontSize = 15.sp, fontWeight = FontWeight.Bold,
-                    color = if (s.output.isEmpty()) MaterialTheme.colorScheme.outline
-                            else MaterialTheme.colorScheme.onPrimary,
+                MgIcon(
+                    "check", size = 16.dp,
+                    tint = if (s.output.isEmpty()) MaterialTheme.colorScheme.outline
+                           else MaterialTheme.colorScheme.onPrimary,
                 )
             }
         }

@@ -52,7 +52,7 @@ Ek hi typing engine, do shells (web demo + Android IME). Android app ka poora lo
 | `media/` | ~480 | GIF/Stickers layer — bundled pack data (generated), Klipy API client + MiniJson parser, availability gating; Android par `MediaCommitController` (Commit Content API + FileProvider) | same |
 | `toolbar/` | ~330 | Gboard keyboard toolbar model — access points, flags, suggestion-strip build (capacity/order/overflow/chips), panel enums, symbols categories | `docs/research/toolbar-project/` |
 | `voice/` | ~1200 | Gboard-style voice toolbar — 5 states, drag/flip/dock, persistence, dictation bridge, Compose UI | `docs/research/voice-pill-project/` |
-| `ui/` | 1173 | Compose keyboard, themes, popups, settings screen, in-app preview | web CSS/JS render + `mgboard-setting-project` |
+| `ui/` | 1173 | Compose keyboard, themes, popups, settings screen, in-app preview; **`MgIcons.kt`** = monochrome Canvas vector icon set (~40 ids, 24×24 viewport, ~2dp stroke) + `mgIconTint()` (white on dark themes, `#5F6368` on light — Gboard tint parity). Saara UI chrome isi se render hota hai; colored emoji sirf panel content (emoji/stickers/GIFs) mein | web CSS/JS render + `mgboard-setting-project` |
 
 ## Design rules (jo kabhi nahi todne)
 

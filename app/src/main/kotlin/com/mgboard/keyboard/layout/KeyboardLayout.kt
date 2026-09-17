@@ -116,8 +116,8 @@ object KeyboardLayout {
         }
         val row = mutableListOf(
             KeySpec(KeyKind.TOGGLE_123, glyph = toggleGlyph, semantic = "toggle", weight = W_TOGGLE),
-            KeySpec(KeyKind.EMOJI, glyph = "🙂", weight = W_EMOJI),
-            KeySpec(KeyKind.GLOBE, glyph = "🌐", weight = W_GLOBE),
+            KeySpec(KeyKind.EMOJI, glyph = "☺", weight = W_EMOJI),
+            KeySpec(KeyKind.GLOBE, glyph = "⊕", weight = W_GLOBE),
         )
         if (showGridMenu) row += KeySpec(KeyKind.GRID_MENU, glyph = "⋯", weight = W_EMOJI)
         row += KeySpec(KeyKind.SPACE, label = "", weight = W_SPACE)

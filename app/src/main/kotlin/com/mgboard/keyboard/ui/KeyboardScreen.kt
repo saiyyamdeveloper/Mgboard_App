@@ -214,17 +214,32 @@ private fun KeyView(
             ),
         contentAlignment = Alignment.Center,
     ) {
-        Text(
-            text = display,
-            fontFamily = MgondiFont,
-            fontSize = fontSizeFor(spec, display),
-            fontWeight = if (spec.kind == KeyKind.SPACE) FontWeight.Medium else FontWeight.Normal,
-            color = keyForeground(spec),
-            textAlign = TextAlign.Center,
-            maxLines = 1,
-        )
+        // Gboard-jaise: special keys par colored emoji nahi, monochrome vector icons
+        val iconId: String? = when {
+            spec.kind == KeyKind.GLOBE -> "imeSwitch"
+            spec.kind == KeyKind.BACKSPACE -> "backspace"
+            spec.kind == KeyKind.EMOJI -> "emoji"
+            spec.kind == KeyKind.ENTER && display == SEARCH_ENTER_SENTINEL -> "search"
+            else -> null
+        }
+        if (iconId != null) {
+            MgIcon(iconId, size = 18.dp, tint = keyForeground(spec))
+        } else {
+            Text(
+                text = display,
+                fontFamily = MgondiFont,
+                fontSize = fontSizeFor(spec, display),
+                fontWeight = if (spec.kind == KeyKind.SPACE) FontWeight.Medium else FontWeight.Normal,
+                color = keyForeground(spec),
+                textAlign = TextAlign.Center,
+                maxLines = 1,
+            )
+        }
     }
 }
+
+/** Enter key ka search label sentinel — KeyView isse monochrome search icon banata hai. */
+private const val SEARCH_ENTER_SENTINEL = "\uD83D\uDD0D"
 
 private fun keyDisplay(model: KeyboardModel, host: KeyboardHost, spec: KeySpec): String = when (spec.kind) {
     KeyKind.SPACE -> model.engine.spaceLabel
@@ -232,7 +247,7 @@ private fun keyDisplay(model: KeyboardModel, host: KeyboardHost, spec: KeySpec):
     KeyKind.BACKSPACE -> "⌫"
     KeyKind.ENTER -> host.enterLabel
     KeyKind.SHIFT -> "⇧"
-    KeyKind.GLOBE -> "🌐"
+    KeyKind.GLOBE -> ""      // KeyView MgIcon("imeSwitch") render karta hai
     else -> spec.glyph.ifEmpty { spec.label }
 }
 
@@ -365,9 +380,11 @@ private fun GridMenuPopup(model: KeyboardModel) {
                                     .clickable { model.onGridTile(t) }.padding(vertical = 6.dp),
                                 horizontalAlignment = Alignment.CenterHorizontally,
                             ) {
-                                Text(
-                                    if (t.enabled) GridIcons.of(t.id) else "⊘",
-                                    fontFamily = MgondiFont, fontSize = 20.sp,
+                                MgIcon(
+                                    id = if (t.enabled) t.id else "blocked",
+                                    size = 20.dp,
+                                    tint = if (t.enabled) mgIconTint()
+                                           else MaterialTheme.colorScheme.outline,
                                 )
                                 Text(
                                     text = model.label(t), fontSize = 10.sp, textAlign = TextAlign.Center,

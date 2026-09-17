@@ -92,7 +92,7 @@ fun EmojiPanel(model: KeyboardModel) {
                 )
             }
             Spacer(Modifier.weight(1f))
-            Text("⌫", fontSize = 15.sp, modifier = Modifier.padding(horizontal = 8.dp)
+            MgIcon("backspace", size = 18.dp, modifier = Modifier.padding(horizontal = 8.dp)
                 .clickable { model.engine.backspace() })
         }
 
@@ -210,7 +210,7 @@ fun SymbolsPanel(model: KeyboardModel) {
                 )
             }
             Spacer(Modifier.weight(1f))
-            Text("⌫", fontSize = 15.sp, modifier = Modifier.padding(horizontal = 8.dp)
+            MgIcon("backspace", size = 18.dp, modifier = Modifier.padding(horizontal = 8.dp)
                 .clickable { model.engine.backspace() })
         }
 
@@ -258,7 +258,7 @@ fun ClipboardPanel(model: KeyboardModel) {
         if (entries.isEmpty()) {
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text("📋", fontSize = 24.sp)
+                    MgIcon("clipboard", size = 26.dp, tint = MaterialTheme.colorScheme.outline)
                     Text(
                         text = if (hindi) "अभी कोई क्लिप सेव नहीं है" else "No clips saved yet",
                         fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -278,7 +278,7 @@ fun ClipboardPanel(model: KeyboardModel) {
                     ) {
                         Text(text, fontFamily = MgondiFont, fontSize = 13.sp, maxLines = 2,
                             modifier = Modifier.weight(1f))
-                        Text("✕", fontSize = 12.sp, color = MaterialTheme.colorScheme.outline,
+                        MgIcon("close", size = 13.dp, tint = MaterialTheme.colorScheme.outline,
                             modifier = Modifier.padding(start = 8.dp)
                                 .clickable { model.removeClipboardEntry(text) })
                     }

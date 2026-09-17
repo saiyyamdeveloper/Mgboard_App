@@ -132,17 +132,16 @@ private fun AccessPointItem(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
-        Text(
-            // gated access point par ⊘ — hide-nothing: icon dikhta hai, reason tap par milta hai
-            text = if (ap.gated) "⊘" else ap.glyph,
-            fontFamily = MgondiFont,
-            fontSize = if (ap.glyph.length > 1) 12.sp else 17.sp,
-            color = when {
+        // Gboard-style MONOCHROME vector icon (colored emoji nahi):
+        // dark theme mein plain white, light mein plain gray (mgIconTint)
+        MgIcon(
+            id = if (ap.gated) "blocked" else ap.id,
+            size = 20.dp,
+            tint = when {
                 ap.gated -> MaterialTheme.colorScheme.outline
                 active -> MaterialTheme.colorScheme.onPrimaryContainer
-                else -> MaterialTheme.colorScheme.onSurface
+                else -> mgIconTint()
             },
-            maxLines = 1,
         )
         // chhota label — access points par naam dikhta hai (Gboard `.label.access-point-item`)
         Text(
@@ -190,8 +189,8 @@ fun ToolbarPanelHost(model: KeyboardModel, host: KeyboardHost) {
             Text(panel.label(hindi), fontFamily = MgondiFont, fontSize = 13.sp,
                 fontWeight = FontWeight.SemiBold, modifier = Modifier.weight(1f))
             // TalkBack label = Gboard ka close pattern
-            Text("✕", fontSize = 15.sp,
-                modifier = Modifier.padding(horizontal = 8.dp).clickable { model.closeToolbarPanel() })
+            MgIcon("close", size = 16.dp, modifier = Modifier.padding(horizontal = 8.dp)
+                .clickable { model.closeToolbarPanel() })
         }
 
         when (panel) {
@@ -266,7 +265,8 @@ private fun FeaturesMenuPanel(model: KeyboardModel) {
                             .clickable { model.onAccessPoint(ap) }.padding(vertical = 6.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
-                        Text(if (ap.gated) "⊘" else ap.glyph, fontFamily = MgondiFont, fontSize = 18.sp)
+                        MgIcon(if (ap.gated) "blocked" else ap.id, size = 22.dp,
+                            tint = if (ap.gated) MaterialTheme.colorScheme.outline else mgIconTint())
                         Text(ap.label(hindi), fontSize = 9.sp, maxLines = 2, textAlign = TextAlign.Center,
                             color = if (ap.gated) MaterialTheme.colorScheme.outline
                                     else MaterialTheme.colorScheme.onSurface)
@@ -289,7 +289,7 @@ private fun MoreKeyboardOptionsPanel(model: KeyboardModel) {
                     .padding(horizontal = 16.dp, vertical = 11.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                Text(item.glyph, fontSize = 15.sp, modifier = Modifier.padding(end = 12.dp))
+                MgIcon(item.id, size = 20.dp, modifier = Modifier.padding(end = 12.dp))
                 Column(Modifier.weight(1f)) {
                     Text(item.label(hindi), fontFamily = MgondiFont, fontSize = 13.sp)
                     if (item.summary(hindi).isNotEmpty()) {
@@ -319,7 +319,7 @@ private fun EditMenuPanel(model: KeyboardModel) {
                     .clickable { item.onClick() }.padding(vertical = 10.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                Text(item.glyph, fontSize = 18.sp)
+                MgIcon(item.id, size = 22.dp)
                 Text(item.label(hindi), fontSize = 10.sp, textAlign = TextAlign.Center, maxLines = 2)
             }
         }

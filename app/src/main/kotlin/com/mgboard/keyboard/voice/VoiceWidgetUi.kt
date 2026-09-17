@@ -20,6 +20,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import com.mgboard.keyboard.ui.MgIcon
+import com.mgboard.keyboard.ui.mgIconTint
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -480,7 +482,7 @@ private fun MicCircle(controller: VoiceWidgetController, size: androidx.compose.
                 ),
             contentAlignment = Alignment.Center,
         ) {
-            Text(if (mic == MicState.LISTENING) "🎙" else "🎤", fontSize = (size.value * 0.45f).sp)
+            MgIcon("voice", size = (size.value * 0.5f).dp, tint = mgIconTint())
         }
         if (localeTag) {
             Text(

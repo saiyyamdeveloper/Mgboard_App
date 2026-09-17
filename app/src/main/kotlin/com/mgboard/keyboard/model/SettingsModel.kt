@@ -53,20 +53,20 @@ data class SgItem(
 
 object SgPages {
     val ALL: List<SgPage> = listOf(
-        SgPage("preferences", "Preferences", "प्राथमिकताएं", "⚙️"),
-        SgPage("theme", "Theme", "थीम", "🎨"),
-        SgPage("languages", "Languages", "भाषाएं", "🌐"),
-        SgPage("glide", "Glide typing", "ग्लाइड करके टाइप करना", "👆"),
-        SgPage("correction", "Text correction", "टेक्स्ट सुधार", "✅"),
-        SgPage("voice", "Voice typing", "बोली को लिखाई में बदलना", "🎤"),
-        SgPage("expressions", "Emojis, Stickers & GIFs", "इमोजी, स्टिकर और GIF", "😊"),
-        SgPage("clipboard", "Clipboard", "क्लिपबोर्ड", "📋"),
-        SgPage("personalization", "Personalization", "पर्सनलाइज़ेशन", "🧠"),
-        SgPage("privacy", "Privacy", "निजता", "🔒"),
-        SgPage("advanced", "Advanced", "उन्नत", "🔧"),
-        SgPage("debug", "Developer / Debug", "डेवलपर / डीबग", "🧪"),
-        SgPage("help", "Help & feedback", "सहायता और फ़ीडबैक", "❓"),
-        SgPage("about", "About", "जानकारी", "ℹ️"),
+        SgPage("preferences", "Preferences", "प्राथमिकताएं", "settings"),
+        SgPage("theme", "Theme", "थीम", "theme"),
+        SgPage("languages", "Languages", "भाषाएं", "imeSwitch"),
+        SgPage("glide", "Glide typing", "ग्लाइड करके टाइप करना", "glide"),
+        SgPage("correction", "Text correction", "टेक्स्ट सुधार", "check"),
+        SgPage("voice", "Voice typing", "बोली को लिखाई में बदलना", "voice"),
+        SgPage("expressions", "Emojis, Stickers & GIFs", "इमोजी, स्टिकर और GIF", "emoji"),
+        SgPage("clipboard", "Clipboard", "क्लिपबोर्ड", "clipboard"),
+        SgPage("personalization", "Personalization", "पर्सनलाइज़ेशन", "person"),
+        SgPage("privacy", "Privacy", "निजता", "lock"),
+        SgPage("advanced", "Advanced", "उन्नत", "wrench"),
+        SgPage("debug", "Developer / Debug", "डेवलपर / डीबग", "flask"),
+        SgPage("help", "Help & feedback", "सहायता और फ़ीडबैक", "help"),
+        SgPage("about", "About", "जानकारी", "info"),
     )
 
     fun byId(id: String): SgPage? = ALL.firstOrNull { it.id == id }

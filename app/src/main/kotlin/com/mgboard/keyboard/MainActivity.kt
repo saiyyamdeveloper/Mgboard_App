@@ -115,7 +115,7 @@ private fun SetupCard() {
             Button(onClick = {
                 ctx.startActivity(Intent(Settings.ACTION_INPUT_METHOD_SETTINGS))
             }) { Text("Open keyboard settings") }
-            OutlinedButton(onClick = { showImePicker(ctx) }) { Text("🌐 Choose keyboard") }
+            OutlinedButton(onClick = { showImePicker(ctx) }) { Text("Choose keyboard") }
         }
         Text(
             text = if (enabled) "✓ MgBoard service system mein enabled hai"
@@ -163,7 +163,7 @@ private fun LivePreview(theme: String, onThemeChange: (String) -> Unit) {
     // engine ke har change par output text refresh karo
     model.onChange = { out = input.text; status = describe(model) }
 
-    SectionCard(title = "🔍 Live preview (asli engine)") {
+    SectionCard(title = "Live preview (asli engine)") {
         // output box — Gondi glyph dikhein, isliye bundled font
         Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)) {
             Text(
@@ -237,19 +237,19 @@ private fun LivePreview(theme: String, onThemeChange: (String) -> Unit) {
             }) { Text("Panel: " + model.toolbarPanel.name.lowercase()) }
             OutlinedButton(onClick = {
                 model.openTranslatePanel(); refreshTick()
-            }) { Text("🗣 " + (settings.uiHindi.let { if (it) "अनुवाद" else "Translate" })) }
+            }) { Text((settings.uiHindi.let { if (it) "अनुवाद" else "Translate" })) }
             OutlinedButton(onClick = { showKeyDialog = true; refreshTick() }) {
-                Text(if (settings.klipyAppKey().isBlank()) "🔑 Klipy key: —" else "🔑 Klipy key: ✓")
+                Text("Klipy key: " + if (settings.klipyAppKey().isBlank()) "—" else "✓")
             }
             OutlinedButton(onClick = {
                 settings.previewEditorSupportsMedia = !settings.previewEditorSupportsMedia
                 model.openToolbarPanel(com.mgboard.keyboard.toolbar.ToolbarPanel.EMOJI)
                 refreshTick()
-            }) { Text(if (settings.previewEditorSupportsMedia) "😊 Media ON" else "😊 Media OFF") }
+            }) { Text(if (settings.previewEditorSupportsMedia) "Media ON" else "Media OFF") }
             OutlinedButton(onClick = {
                 settings.addClipboardEntry("नमस्ते MgBoard"); settings.addClipboardEntry("𑴌𑴳𑴛")
                 model.openToolbarPanel(com.mgboard.keyboard.toolbar.ToolbarPanel.CLIPBOARD); refreshTick()
-            }) { Text("📋 Clipboard") }
+            }) { Text("Clipboard") }
         }
 
         // ── Klipy API key dialog (runtime key — rebuild ki zaroorat nahi) ──────
@@ -262,11 +262,11 @@ private fun LivePreview(theme: String, onThemeChange: (String) -> Unit) {
         }
 
         // ── voice toolbar (Gboard-style pill) ke controls ────────────────────────
-        Text("🎙 Voice toolbar (Gboard-style pill)", fontSize = 12.sp,
+        Text("Voice toolbar (Gboard-style pill)", fontSize = 12.sp,
             fontWeight = FontWeight.SemiBold, modifier = Modifier.padding(top = 6.dp))
         Row(horizontalArrangement = Arrangement.spacedBy(6.dp), modifier = Modifier.fillMaxWidth()) {
             OutlinedButton(onClick = { voice.onMicAccessPointTap(); refreshTick() }) {
-                Text("🎤 Open voice panel")
+                Text("Open voice panel")
             }
             OutlinedButton(onClick = { voice.onChevronTap(); refreshTick() }) { Text("⌄⌄ Pill") }
             OutlinedButton(onClick = { voice.onBadgeTap(); refreshTick() }) { Text("☰ Menu") }
