@@ -8,6 +8,15 @@ import android.os.Build
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import androidx.compose.foundation.layout.Box
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LifecycleRegistry
+import androidx.lifecycle.ViewTreeLifecycleOwner
+import androidx.savedstate.SavedStateRegistry
+import androidx.savedstate.SavedStateRegistryController
+import androidx.savedstate.SavedStateRegistryOwner
+import androidx.savedstate.ViewTreeSavedStateRegistryOwner
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -44,7 +53,23 @@ import kotlin.math.roundToInt
  * one-handed / theme badalne par keyboard turant update hota hai (restart nahi —
  * padding-project ki requirement).
  */
-class MgBoardIme : InputMethodService(), KeyboardHost {
+class MgBoardIme : InputMethodService(), KeyboardHost, LifecycleOwner, SavedStateRegistryOwner {
+
+    // ── Compose owners (IME = Service, Activity nahi) ─────────────────────────
+    // InputMethodService ek **Service** hai, isliye Activity ki tarah
+    // ViewTreeLifecycleOwner / ViewTreeSavedStateRegistryOwner apne-aap set NAHI hote.
+    // Bina inke ComposeView attach hote hi crash karta hai:
+    //   "java.lang.IllegalStateException: ViewTreeLifecycleOwner not found from
+    //    DecorView@…[InputMethod]"  → keyboard khulta hi nahi.
+    private val lifecycleRegistry = LifecycleRegistry(this)
+
+    override val lifecycle: Lifecycle
+        get() = lifecycleRegistry
+
+    private val savedStateRegistryController = SavedStateRegistryController.create(this)
+
+    override val savedStateRegistry: SavedStateRegistry
+        get() = savedStateRegistryController.savedStateRegistry
 
     private lateinit var prefs: SgPrefs
     private lateinit var textInput: ImeTextInput
@@ -64,6 +89,10 @@ class MgBoardIme : InputMethodService(), KeyboardHost {
 
     override fun onCreate() {
         super.onCreate()
+        // Compose owners: `performRestore` sirf INITIALIZED state par allowed hai,
+        // isliye ye lifecycle events se PEHLE chalana zaroori hai.
+        savedStateRegistryController.performRestore(null)
+        lifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_CREATE)
         prefs = SgPrefs(this)
         textInput = ImeTextInput { currentInputConnection }
         val engine = TypingEngine(textInput)
@@ -100,6 +129,8 @@ class MgBoardIme : InputMethodService(), KeyboardHost {
         voice.release()
         gesturePadding.detach()
         prefs.removeListener(prefsListener)
+        lifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_STOP)
+        lifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_DESTROY)
         super.onDestroy()
     }
 
@@ -123,6 +154,19 @@ class MgBoardIme : InputMethodService(), KeyboardHost {
             }
         }
         composeView = view
+
+        // Compose owners — IME window ke **decorView** par (Compose wahin dhoondhta hai),
+        // plus ComposeView par bhi (belt & braces).
+        window?.window?.decorView?.let { decor ->
+            ViewTreeLifecycleOwner.set(decor, this)
+            ViewTreeSavedStateRegistryOwner.set(decor, this)
+        }
+        ViewTreeLifecycleOwner.set(view, this)
+        ViewTreeSavedStateRegistryOwner.set(view, this)
+        view.setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+        // recomposition tabhi chalu hoti hai jab lifecycle >= STARTED ho
+        lifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_START)
+
         gesturePadding.attach(view)
         gesturePadding.setKeyboardBackgroundColor(surfaceColorInt())
         applyLiveSettings()

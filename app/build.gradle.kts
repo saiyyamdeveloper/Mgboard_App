@@ -99,6 +99,9 @@ dependencies {
     implementation("io.coil-kt:coil-gif:2.7.0")
     implementation("androidx.activity:activity-compose:1.9.2")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.6")
+    // Compose IME (InputMethodService = Service) ke liye SavedStateRegistryOwner
+    // — bina iske ComposeView attach hote hi crash karta hai.
+    implementation("androidx.savedstate:savedstate:1.2.1")
 
     implementation(platform("androidx.compose:compose-bom:2024.09.00"))
     implementation("androidx.compose.ui:ui")
